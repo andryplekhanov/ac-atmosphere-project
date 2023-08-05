@@ -24,3 +24,6 @@ django==4.2.4
 psycopg2-binary~=2.9.3
 asgiref~=3.7.2
 redis==4.6.0
+django-mptt==0.14.0
+django-mptt-admin==2.5.1
+Pillow==10.0.0

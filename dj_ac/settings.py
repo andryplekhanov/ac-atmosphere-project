@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'mptt',
+    'django_mptt_admin',
+
     'app_telegram.apps.AppTelegramConfig',
     'app_settings.apps.AppSettingsConfig',
     'app_products.apps.AppProductsConfig',
