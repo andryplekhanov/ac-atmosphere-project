@@ -16,7 +16,7 @@ image_validator = FileExtensionValidator(
 
 class Category(MPTTModel):
     name = models.CharField(max_length=255, db_index=True, verbose_name='название')
-    slug = models.SlugField(max_length=255, db_index=True, unique=True, verbose_name='url-адрес')
+    slug = models.SlugField(max_length=255, unique=True, verbose_name='url-адрес')
     parent = TreeForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='children',
                             db_index=True, verbose_name='родительская категория')
 
