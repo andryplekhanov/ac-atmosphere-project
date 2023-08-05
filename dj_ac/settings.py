@@ -42,10 +42,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'django.contrib.postgres',
 
     'app_telegram.apps.AppTelegramConfig',
-
+    'app_settings.apps.AppSettingsConfig',
+    'app_products.apps.AppProductsConfig',
+    'app_orders.apps.AppOrdersConfig',
 ]
 
 MIDDLEWARE = [
