@@ -17,12 +17,12 @@ class TGUser(TimeBasedModel):
     # Раскомментировать, если нужна связка с аккаунтами с сайта
     # user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True, verbose_name=_('пользователь'))
     tg_id = models.BigIntegerField(unique=True, db_index=True, verbose_name=_('id Telegram'))
-    username = models.CharField(unique=True, max_length=255, verbose_name=_('username в Telegram'))
-    fullname = models.CharField(max_length=255, blank=True, null=True, verbose_name=_('ФИО в Telegram'))
+    username = models.CharField(unique=True, max_length=255, verbose_name=_('username'))
+    fullname = models.CharField(max_length=255, blank=True, null=True, verbose_name=_('имя'))
     phone_regex = RegexValidator(regex=r'^\+\d{11,20}',
                                  message=_("The phone number must be specified in the following format: '+79012345678'."))
     phone_number = models.CharField(validators=[phone_regex], max_length=20, blank=True,
-                                    verbose_name=_('номер телефона'), db_index=True)
+                                    verbose_name=_('телефон'), db_index=True)
 
     class Meta:
         verbose_name = _('пользователь')
@@ -37,10 +37,10 @@ class CallRequest(TimeBasedModel):
         ("0", _("Закрытая")),
         ("1", _("Новая")),
         ("2", _("В процессе")),
+        ("3", _("Не дозвонился")),
     )
     from_user = models.ForeignKey('TGUser', on_delete=models.SET_NULL, null=True, related_name='calls',
                                   verbose_name=_('пользователь'), db_index=True)
-    message = models.TextField(blank=True, max_length=3000, verbose_name=_('сообщение'))
     status = models.CharField(max_length=30, choices=STATUS_CHOICES, verbose_name=_('статус'), default="1")
     comment = models.TextField(null=True, blank=True, max_length=10000, verbose_name=_('комментарий администратора'))
 

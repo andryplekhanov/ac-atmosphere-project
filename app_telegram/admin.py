@@ -12,7 +12,7 @@ class TGUserAdmin(admin.ModelAdmin):
 
 
 class CallRequestAdmin(admin.ModelAdmin):
-    list_display = ['id', 'get_user_tg_id', 'get_user_phone', 'created', 'status']
+    list_display = ['id', 'status', 'get_user_fullname', 'get_user_phone', 'created']
     list_filter = ['created', 'status']
     search_fields = ['from_user__tg_id', 'from_user__username', 'from_user__phone_number']
     save_on_top = True
@@ -21,13 +21,13 @@ class CallRequestAdmin(admin.ModelAdmin):
         if obj.from_user:
             return f'{obj.from_user.phone_number}'
         return _('пользователь удалён')
-    get_user_phone.short_description = _('номер телефона')
+    get_user_phone.short_description = _('Телефон')
 
-    def get_user_tg_id(self, obj):
+    def get_user_fullname(self, obj):
         if obj.from_user:
-            return f'{obj.from_user.tg_id}'
+            return f'{obj.from_user.fullname}'
         return _('пользователь удалён')
-    get_user_tg_id.short_description = _('id Telegram')
+    get_user_fullname.short_description = _('Имя')
 
 
 admin.site.register(TGUser, TGUserAdmin)

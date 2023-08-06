@@ -13,12 +13,10 @@ async def bot_echo(message: types.Message):
     await message.answer('\n'.join(text))
 
 
-async def bot_echo_all(message: types.Message, state: FSMContext):
-    state_name = await state.get_state()
+async def bot_echo_all(message: types.Message):
     text = [
-        f'Эхо в состоянии {hcode(state_name)}',
-        'Содержание сообщения:',
-        hcode(message.text)
+        f'Вы ввели что-то непонятное\n',
+        'Пожалуйста, введите корректный ответ на вопрос, либо сбросьте состояние командой /start и начните заново.'
     ]
     await message.answer('\n'.join(text))
 

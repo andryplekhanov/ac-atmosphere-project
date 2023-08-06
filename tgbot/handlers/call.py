@@ -1,50 +1,54 @@
+import re
+
 from aiogram import Dispatcher
 from aiogram.dispatcher import FSMContext
 from aiogram.types import Message
 
+from tgbot.config import Config
 from tgbot.misc.states import UsersStates
-from tgbot.models.commands import add_user, add_call_request
+from tgbot.models.commands import add_or_get_user, find_user
+from tgbot.services.saver import save_call_request
 
 
-async def call(message: Message, state: FSMContext) -> None:
+async def call(message: Message, state: FSMContext, config: Config) -> None:
     await state.finish()
     async with state.proxy() as data:
         data['last_command'] = 'call'
-    await message.answer('Введите ФИО')
-    await UsersStates.user_fullname.set()
+
+    user = await find_user(user_id=int(message.from_user.id))
+    if user:
+        await save_call_request(user, message, state, config)
+    else:
+        await message.answer('Введите ваше имя')
+        await UsersStates.user_fullname.set()
 
 
 async def get_fullname(message: Message, state: FSMContext) -> None:
     async with state.proxy() as data:
-        data['user_username'] = message.text
+        data['user_fullname'] = message.text
         data['user_id'] = int(message.from_user.id)
         data['user_username'] = message.from_user.username
     await message.answer('Введите номер телефона в формате +79012345678')
     await UsersStates.user_phone.set()
 
 
-async def get_phone(message: Message, state: FSMContext) -> None:
-    async with state.proxy() as data:
-        data['user_phone'] = message.text
-    await message.answer('Введите сообщение для администратора')
-    await UsersStates.user_message.set()
-
-
-async def get_message(message: Message, state: FSMContext) -> None:
-    async with state.proxy() as data:
-        data['user_message'] = message.text
-    user = await add_user(message.from_user.id, message.from_user.full_name, message.from_user.username)
-    states = await state.get_data()
-    call_request = await add_call_request(user, states)
-    if call_request:
-        await message.answer('Заявка отправлена. Ожидайте звонка.')
+async def get_phone(message: Message, state: FSMContext, config: Config) -> None:
+    is_phone_valid = re.fullmatch(r'^\+\d{11,20}', message.text)
+    if not is_phone_valid:
+        await message.answer('Номер телефона должен быть в формате +79012345678')
     else:
-        await message.answer('Произошла ошибка. Попробуйте ввести команду /call ещё раз')
-    await state.reset_state(with_data=False)
+        async with state.proxy() as data:
+            data['user_phone'] = message.text
+        states = await state.get_data()
+        user = await add_or_get_user(user_id=states.get('user_id'),
+                                     full_name=states.get('user_fullname'),
+                                     username=states.get('user_username'),
+                                     phone=states.get('user_phone')
+                                     )
+        await save_call_request(user, message, state, config)
 
 
 def register_call(dp: Dispatcher):
     dp.register_message_handler(call, commands=["call"], state="*"),
     dp.register_message_handler(get_fullname, state=UsersStates.user_fullname),
-    dp.register_message_handler(get_phone, state=UsersStates.user_phone),
-    dp.register_message_handler(get_message, state=UsersStates.user_message),
+    dp.register_message_handler(get_phone, state=UsersStates.user_phone, content_types=['contact', 'text']),

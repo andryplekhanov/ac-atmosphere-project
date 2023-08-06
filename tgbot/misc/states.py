@@ -8,8 +8,8 @@ class UsersStates(StatesGroup):
 
     Attributes:
         last_command (str): команда, которую ввёл пользователь.
-        user_id (int): id Telegram.
-        user_username (str): username в Telegram.
+        user_id (int): id пользователя вTelegram.
+        user_username (str): username пользователя в Telegram.
         user_fullname (str): ФИО в Telegram.
         user_phone (str): номер телефона.
         user_message (str): сообщение пользователя.
