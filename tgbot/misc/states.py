@@ -14,6 +14,7 @@ class UsersStates(StatesGroup):
         user_phone (str): номер телефона.
         user_message (str): сообщение пользователя.
         current_page (int): текущая страница пагинации.
+        user (TGUser): пользователь
     """
 
     last_command = State()
@@ -23,3 +24,4 @@ class UsersStates(StatesGroup):
     user_phone = State()
     user_message = State()
     current_page = State()
+    user = State()

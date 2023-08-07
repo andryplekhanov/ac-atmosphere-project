@@ -38,10 +38,10 @@ def add_or_get_user(user_id: int, full_name: str, username: str, phone: str) -> 
     user, created = TGUser.objects.get_or_create(tg_id=user_id)
     if created:
         logger.info(f"user {user_id} was added to DB")
-        user.username = username
-        user.fullname = full_name
-        user.phone_number = phone
-        user.save()
+    user.username = username
+    user.fullname = full_name
+    user.phone_number = phone
+    user.save()
     return user
 
 
