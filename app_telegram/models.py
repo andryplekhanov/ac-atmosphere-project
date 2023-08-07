@@ -1,5 +1,4 @@
 from django.contrib.auth.models import User
-from django.core.validators import RegexValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -18,10 +17,7 @@ class TGUser(TimeBasedModel):
     # user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True, verbose_name=_('пользователь'))
     tg_id = models.BigIntegerField(unique=True, db_index=True, verbose_name=_('id Telegram'))
     fullname = models.CharField(max_length=255, blank=True, null=True, verbose_name=_('имя'))
-    phone_regex = RegexValidator(regex=r'^\+\d{11,20}',
-                                 message=_("The phone number must be specified in the following format: '+79012345678'."))
-    phone_number = models.CharField(validators=[phone_regex], max_length=20, blank=True,
-                                    verbose_name=_('телефон'), db_index=True)
+    phone_number = models.CharField(max_length=20, blank=True, null=True, verbose_name=_('телефон'), db_index=True)
 
     class Meta:
         verbose_name = _('пользователь')
