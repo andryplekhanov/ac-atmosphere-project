@@ -9,6 +9,7 @@ from tgbot.filters.admin import AdminFilter
 from tgbot.handlers.admin import register_admin
 from tgbot.handlers.call import register_call
 from tgbot.handlers.echo import register_echo
+from tgbot.handlers.mess import register_mess
 from tgbot.handlers.start import register_start
 from tgbot.middlewares.environment import EnvironmentMiddleware
 from tgbot.services.default_commands import set_default_commands
@@ -28,6 +29,7 @@ def register_all_handlers(dp):
     register_admin(dp)
     register_start(dp)
     register_call(dp)
+    register_mess(dp)
 
     register_echo(dp)
 

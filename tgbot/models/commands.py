@@ -12,8 +12,7 @@ from typing import Union
 from asgiref.sync import sync_to_async
 from django.core.exceptions import ObjectDoesNotExist
 
-from app_telegram.models import TGUser, CallRequest
-
+from app_telegram.models import TGUser, CallRequest, TGMessage
 
 logger = logging.getLogger(__name__)
 
@@ -32,22 +31,37 @@ def find_user(user_id: int) -> Union[TGUser, None]:
 
 
 @sync_to_async
-def add_or_get_user(user_id: int, full_name: str, username: str, phone: str) -> TGUser:
+def get_or_create_user(user_id: int) -> TGUser:
     """ Создаёт нового пользователя в БД. Возвращает объект пользователя. """
 
     user, created = TGUser.objects.get_or_create(tg_id=user_id)
     if created:
         logger.info(f"user {user_id} was added to DB")
-    user.username = username
-    user.fullname = full_name
-    user.phone_number = phone
-    user.save()
+        user.fullname = 'не заполнено'
+        user.phone_number = 'не заполнено'
+        user.save()
     return user
 
 
 @sync_to_async
+def update_user(user_id: int, full_name: str, phone: str) -> TGUser:
+    """ Обновляет данные пользователя в БД. Возвращает объект пользователя. """
+
+    try:
+        user = TGUser.objects.get(tg_id=user_id)
+        user.fullname = full_name
+        user.phone_number = phone
+        user.save()
+        logger.info(f"{user} was updated in DB")
+        return user
+    except Exception as ex:
+        logger.error(f"can't find and update user {user_id}: {ex}")
+        pass
+
+
+@sync_to_async
 def add_call_request(user: TGUser) -> Union[CallRequest, None]:
-    """ Создаёт заявку на звонок. Возвращает объект CallRequest или False. """
+    """ Создаёт заявку на звонок. Возвращает объект CallRequest или None. """
 
     try:
         call = CallRequest.objects.create(from_user=user)
@@ -55,4 +69,17 @@ def add_call_request(user: TGUser) -> Union[CallRequest, None]:
         return call
     except Exception as ex:
         logger.error(f"FAIL. CallRequest from {user} was NOT added to DB: {ex}")
+        return None
+
+
+@sync_to_async
+def add_message(user: TGUser, text: str) -> Union[TGMessage, None]:
+    """ Создаёт сообщение. Возвращает объект TGMessage или None. """
+
+    try:
+        mess = TGMessage.objects.create(from_user=user, text=text)
+        logger.info(f"Message from {user} was added to DB")
+        return mess
+    except Exception as ex:
+        logger.error(f"FAIL. Message from {user} was NOT added to DB: {ex}")
         return None
