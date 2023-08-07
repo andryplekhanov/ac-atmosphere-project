@@ -7,7 +7,7 @@ from aiogram.types import Message, CallbackQuery
 from tgbot.config import Config
 from tgbot.keyboards.inline import personal_data_choice
 from tgbot.misc.states import UsersStates
-from tgbot.models.commands import add_or_get_user, find_user
+from tgbot.models.commands import get_or_create_user, update_user
 from tgbot.services.saver import save_call_request
 
 
@@ -15,18 +15,19 @@ async def call(message: Message, state: FSMContext) -> None:
     await state.finish()
     async with state.proxy() as data:
         data['last_command'] = 'call'
+        data['user_id'] = int(message.from_user.id)
 
-    user = await find_user(user_id=int(message.from_user.id))
-    if user:
+    user = await get_or_create_user(user_id=int(message.from_user.id))
+    if user.fullname == 'не заполнено' or user.phone_number == 'не заполнено':
+        await message.answer('Введите ваше имя')
+        await UsersStates.user_fullname.set()
+    else:
         async with state.proxy() as data:
             data['user'] = user
         await message.answer(f'Ваше имя: <b>{user.fullname}</b>\n'
                              f'Ваш телефон: <b>{user.phone_number}</b>\n'
                              f'💡 Всё верно?',
                              reply_markup=personal_data_choice, parse_mode='html')
-    else:
-        await message.answer('Введите ваше имя')
-        await UsersStates.user_fullname.set()
 
 
 async def change_personal_data(call: CallbackQuery) -> None:
@@ -38,16 +39,24 @@ async def change_personal_data(call: CallbackQuery) -> None:
 async def confirm_personal_data(call: CallbackQuery, state: FSMContext, config: Config) -> None:
     await call.message.edit_reply_markup(reply_markup=None)
     states = await state.get_data()
-    await save_call_request(user=states.get('user'), message=call.message, state=state, config=config)
+    if states.get('last_command') == 'call':
+        await save_call_request(user=states.get('user'), message=call.message, state=state, config=config)
+    elif states.get('last_command') == 'mess':
+        await UsersStates.user_message.set()
+        await call.message.answer('Введите текст обращения')
 
 
 async def get_fullname(message: Message, state: FSMContext) -> None:
     async with state.proxy() as data:
         data['user_fullname'] = message.text
-        data['user_id'] = int(message.from_user.id)
-        data['user_username'] = message.from_user.username
-    await message.answer('Введите номер телефона в формате +79012345678')
-    await UsersStates.user_phone.set()
+
+    states = await state.get_data()
+    if states.get('last_command') == 'mess':
+        await UsersStates.user_message.set()
+        await message.answer('Введите текст обращения')
+    else:
+        await message.answer('Введите номер телефона в формате +79012345678')
+        await UsersStates.user_phone.set()
 
 
 async def get_phone(message: Message, state: FSMContext, config: Config) -> None:
@@ -58,11 +67,9 @@ async def get_phone(message: Message, state: FSMContext, config: Config) -> None
         async with state.proxy() as data:
             data['user_phone'] = message.text
         states = await state.get_data()
-        user = await add_or_get_user(user_id=states.get('user_id'),
-                                     full_name=states.get('user_fullname'),
-                                     username=states.get('user_username'),
-                                     phone=states.get('user_phone')
-                                     )
+        user = await update_user(user_id=states.get('user_id'),
+                                 full_name=states.get('user_fullname'),
+                                 phone=states.get('user_phone'))
         await save_call_request(user, message, state, config)
 
 
