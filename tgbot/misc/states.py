@@ -9,7 +9,6 @@ class UsersStates(StatesGroup):
     Attributes:
         last_command (str): команда, которую ввёл пользователь.
         user_id (int): id пользователя вTelegram.
-        user_username (str): username пользователя в Telegram.
         user_fullname (str): ФИО в Telegram.
         user_phone (str): номер телефона.
         user_message (str): сообщение пользователя.
@@ -19,7 +18,6 @@ class UsersStates(StatesGroup):
 
     last_command = State()
     user_id = State()
-    user_username = State()
     user_fullname = State()
     user_phone = State()
     user_message = State()
