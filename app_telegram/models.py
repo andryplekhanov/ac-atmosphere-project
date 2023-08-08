@@ -48,3 +48,10 @@ class CallRequest(TimeBasedModel):
 
     def __str__(self):
         return f"call request #{self.id} from {self.from_user if self.from_user else _('пользователь удалён')}"
+
+    def save(self, *args, **kwargs):
+        if self.status == '5':
+            user = TGUser.objects.get(tg_id=self.from_user.tg_id)
+            user.is_banned = True
+            user.save(update_fields=['is_banned', ])
+        super().save(*args, **kwargs)

@@ -72,3 +72,14 @@ def get_all_admins() -> list[dict]:
         admin_dict['username'] = admin.username
         result.append(admin_dict)
     return result
+
+
+@sync_to_async
+def get_banned_ids() -> list[int]:
+    """
+    Получает всех забаненных пользователей.
+    Возвращает список идентификаторов.
+    """
+
+    banned_users = TGUser.objects.filter(is_banned=True).only('tg_id')
+    return [user.tg_id for user in banned_users]

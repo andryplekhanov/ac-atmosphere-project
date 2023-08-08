@@ -32,4 +32,4 @@ async def mess(message: Message, state: FSMContext) -> None:
 
 
 def register_mess(dp: Dispatcher):
-    dp.register_message_handler(mess, commands=["mess"], state="*"),
+    dp.register_message_handler(mess, commands=["mess"], state="*", is_banned=False),

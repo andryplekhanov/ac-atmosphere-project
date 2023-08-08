@@ -101,8 +101,8 @@ async def get_phone(message: Message, state: FSMContext) -> None:
 
 
 def register_call(dp: Dispatcher):
-    dp.register_message_handler(call, commands=["call"], state="*"),
-    dp.register_message_handler(get_fullname, state=UsersStates.user_fullname),
-    dp.register_message_handler(get_phone, state=UsersStates.user_phone, content_types=['contact', 'text']),
-    dp.register_callback_query_handler(change_personal_data, text='change_pers_data', state="*")
-    dp.register_callback_query_handler(confirm_personal_data, text='confirm_pers_data', state="*")
+    dp.register_message_handler(call, commands=["call"], state="*", is_banned=False),
+    dp.register_message_handler(get_fullname, state=UsersStates.user_fullname, is_banned=False),
+    dp.register_message_handler(get_phone, state=UsersStates.user_phone, content_types=['contact', 'text'], is_banned=False),
+    dp.register_callback_query_handler(change_personal_data, text='change_pers_data', state="*", is_banned=False)
+    dp.register_callback_query_handler(confirm_personal_data, text='confirm_pers_data', state="*", is_banned=False)

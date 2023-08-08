@@ -6,7 +6,9 @@ from aiogram.contrib.fsm_storage.redis import RedisStorage2
 
 from tgbot.config import load_config
 from tgbot.filters.admin import AdminFilter
+from tgbot.filters.ban import BanFilter
 from tgbot.handlers.admin import register_admin
+from tgbot.handlers.ban import register_ban
 from tgbot.handlers.call import register_call
 from tgbot.handlers.echo import register_echo
 from tgbot.handlers.mess import register_mess
@@ -23,9 +25,11 @@ def register_all_middlewares(dp, config):
 
 def register_all_filters(dp):
     dp.filters_factory.bind(AdminFilter)
+    dp.filters_factory.bind(BanFilter)
 
 
 def register_all_handlers(dp):
+    register_ban(dp)
     register_admin(dp)
     register_start(dp)
     register_call(dp)

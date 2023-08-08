@@ -9,4 +9,4 @@ async def start(message: Message, state: FSMContext) -> None:
 
 
 def register_start(dp: Dispatcher):
-    dp.register_message_handler(start, commands=["start"], state="*")
+    dp.register_message_handler(start, commands=["start"], state="*", is_banned=False)
