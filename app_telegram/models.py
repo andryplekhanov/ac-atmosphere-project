@@ -18,6 +18,7 @@ class TGUser(TimeBasedModel):
     tg_id = models.BigIntegerField(unique=True, db_index=True, verbose_name=_('id Telegram'))
     fullname = models.CharField(max_length=255, blank=True, null=True, verbose_name=_('имя'))
     phone_number = models.CharField(max_length=20, blank=True, null=True, verbose_name=_('телефон'), db_index=True)
+    is_banned = models.BooleanField(default=False, verbose_name='забанен')
 
     class Meta:
         verbose_name = _('пользователь')
@@ -34,7 +35,7 @@ class CallRequest(TimeBasedModel):
         ("2", _("В процессе")),
         ("3", _("Не дозвонился")),
         ("4", _("Перезвонить")),
-        # ("5", "Спам (заблокировать)"),
+        ("5", "Спам (заблокировать)"),
     )
     from_user = models.ForeignKey('TGUser', on_delete=models.SET_NULL, null=True, related_name='calls',
                                   verbose_name=_('пользователь'), db_index=True)
@@ -47,25 +48,3 @@ class CallRequest(TimeBasedModel):
 
     def __str__(self):
         return f"call request #{self.id} from {self.from_user if self.from_user else _('пользователь удалён')}"
-
-
-class TGMessage(TimeBasedModel):
-    STATUS_CHOICES = (
-        ("0", "Отвечено"),
-        ("1", "Новое"),
-        ("2", "Прочитано"),
-        ("3", "Отложено"),
-        ("4", "Спам (заблокировать)"),
-    )
-    from_user = models.ForeignKey('TGUser', on_delete=models.SET_NULL, null=True, related_name='messages',
-                                  verbose_name='пользователь', db_index=True)
-    status = models.CharField(max_length=30, choices=STATUS_CHOICES, verbose_name='статус', default="1")
-    text = models.TextField(max_length=10000, verbose_name='текст обращения')
-    comment = models.TextField(null=True, blank=True, max_length=10000, verbose_name='комментарий администратора')
-
-    class Meta:
-        verbose_name = 'сообщение'
-        verbose_name_plural = 'сообщения'
-
-    def __str__(self):
-        return f"message #{self.id} from {self.from_user if self.from_user else _('пользователь удалён')}"

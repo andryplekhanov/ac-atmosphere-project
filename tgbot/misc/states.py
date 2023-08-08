@@ -11,7 +11,6 @@ class UsersStates(StatesGroup):
         user_id (int): id пользователя вTelegram.
         user_fullname (str): ФИО в Telegram.
         user_phone (str): номер телефона.
-        user_message (str): сообщение пользователя.
         current_page (int): текущая страница пагинации.
         user (TGUser): пользователь
     """
@@ -20,6 +19,5 @@ class UsersStates(StatesGroup):
     user_id = State()
     user_fullname = State()
     user_phone = State()
-    user_message = State()
     current_page = State()
     user = State()

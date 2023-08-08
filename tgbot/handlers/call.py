@@ -4,14 +4,18 @@ from aiogram import Dispatcher
 from aiogram.dispatcher import FSMContext
 from aiogram.types import Message, CallbackQuery
 
-from tgbot.config import Config
 from tgbot.keyboards.inline import personal_data_choice
 from tgbot.misc.states import UsersStates
 from tgbot.models.commands import get_or_create_user, update_user
-from tgbot.services.saver import save_call_request
+from tgbot.services.saver import save_call_request, save_message
 
 
 async def call(message: Message, state: FSMContext) -> None:
+    """
+    Хэндлер, реагирующий на команду /call.
+    Получает или создаёт пользователя и запрашивает подтвердить или ввести имя.
+    """
+
     await state.finish()
     async with state.proxy() as data:
         data['last_command'] = 'call'
@@ -31,35 +35,58 @@ async def call(message: Message, state: FSMContext) -> None:
 
 
 async def change_personal_data(call: CallbackQuery) -> None:
+    """
+    Хэндлер, реагирующий на нажатие кнопки 'Изменить данные'.
+    Запрашивает ввод имени.
+    """
+
     await call.message.edit_reply_markup(reply_markup=None)
     await call.message.answer('Введите ваше имя')
     await UsersStates.user_fullname.set()
 
 
-async def confirm_personal_data(call: CallbackQuery, state: FSMContext, config: Config) -> None:
+async def confirm_personal_data(call: CallbackQuery, state: FSMContext) -> None:
+    """
+    Хэндлер, реагирующий на нажатие кнопки с подтверждением контактных данных.
+    Проверяет последнюю введенную команду и вызывает соответствующую функцию-обработчик:
+    save_call_request - если была введена команда /call;
+    save_message - если была введена команда /mess
+    """
+
     await call.message.edit_reply_markup(reply_markup=None)
     states = await state.get_data()
     if states.get('last_command') == 'call':
-        await save_call_request(user=states.get('user'), message=call.message, state=state, config=config)
+        await save_call_request(user=states.get('user'), message=call.message, state=state)
     elif states.get('last_command') == 'mess':
-        await UsersStates.user_message.set()
-        await call.message.answer('Введите текст обращения')
+        await save_message(call.message, state)
 
 
 async def get_fullname(message: Message, state: FSMContext) -> None:
+    """
+    Хэндлер, реагирующий на ввод имени.
+    Записывает имя в состояние пользователя и проверяет последнюю введенную команду.
+    Если была введена команда /mess - вызывает функцию-обработчик save_message,
+    иначе запрашивает у пользователя телефон.
+    """
+
     async with state.proxy() as data:
         data['user_fullname'] = message.text
 
     states = await state.get_data()
     if states.get('last_command') == 'mess':
-        await UsersStates.user_message.set()
-        await message.answer('Введите текст обращения')
+        await save_message(message, state)
     else:
         await message.answer('Введите номер телефона в формате +79012345678')
         await UsersStates.user_phone.set()
 
 
-async def get_phone(message: Message, state: FSMContext, config: Config) -> None:
+async def get_phone(message: Message, state: FSMContext) -> None:
+    """
+    Хэндлер, реагирующий на ввод телефона. Проверяет регуляркой введённый телефон на валидность.
+    Записывает телефон в состояние пользователя, обновляет данные в модели пользователя (update_user)
+    и вызывает функцию-обработчик save_call_request.
+    """
+
     is_phone_valid = re.fullmatch(r'^\+\d{11,20}', message.text)
     if not is_phone_valid:
         await message.answer('Номер телефона должен быть в формате +79012345678')
@@ -70,7 +97,7 @@ async def get_phone(message: Message, state: FSMContext, config: Config) -> None
         user = await update_user(user_id=states.get('user_id'),
                                  full_name=states.get('user_fullname'),
                                  phone=states.get('user_phone'))
-        await save_call_request(user, message, state, config)
+        await save_call_request(user, message, state)
 
 
 def register_call(dp: Dispatcher):

@@ -1,3 +1,4 @@
+from django.contrib import admin
 from django.db import models
 
 from app_settings.exchange_rate_parser import get_exchange_rate
@@ -53,6 +54,7 @@ class CurrencySettings(SingletonModel):
                                         verbose_name='курс доллара', db_index=True)
 
     @property
+    @admin.display(description='текущий курс')
     def dollar_exchange_rate(self):
         if self.use_fix_exchange_rate:
             return self.exchange_rate
