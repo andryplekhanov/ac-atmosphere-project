@@ -1,12 +1,12 @@
-import re
-
 from aiogram import Dispatcher
 from aiogram.dispatcher import FSMContext
 from aiogram.types import Message, CallbackQuery
 
 from tgbot.keyboards.inline import personal_data_choice
+from tgbot.keyboards.reply import share_phone
 from tgbot.misc.states import UsersStates
 from tgbot.models.commands import get_or_create_user, update_user
+from tgbot.services.checker import check_phone
 from tgbot.services.saver import save_call_request, save_message
 
 
@@ -55,10 +55,14 @@ async def confirm_personal_data(call: CallbackQuery, state: FSMContext) -> None:
 
     await call.message.edit_reply_markup(reply_markup=None)
     states = await state.get_data()
-    if states.get('last_command') == 'call':
-        await save_call_request(user=states.get('user'), message=call.message, state=state)
-    elif states.get('last_command') == 'mess':
-        await save_message(call.message, state)
+    try:
+        if states.get('last_command') == 'call':
+            await save_call_request(user=states.get('user'), message=call.message, state=state)
+        elif states.get('last_command') == 'mess':
+            await save_message(call.message, state)
+    except Exception:
+        await call.message.answer('🚫 <b>Что-то пошло не так.</b> Возможно, вы не ввели контактные данные.\n'
+                                  'Нажмите команду <b>/start</b> и попробуйте еще раз.', parse_mode='html')
 
 
 async def get_fullname(message: Message, state: FSMContext) -> None:
@@ -76,23 +80,23 @@ async def get_fullname(message: Message, state: FSMContext) -> None:
     if states.get('last_command') == 'mess':
         await save_message(message, state)
     else:
-        await message.answer('Введите номер телефона в формате +79012345678')
+        await message.answer('Введите номер телефона в формате +79012345678\nили нажмите кнопку внизу',
+                             reply_markup=share_phone)
         await UsersStates.user_phone.set()
 
 
 async def get_phone(message: Message, state: FSMContext) -> None:
     """
-    Хэндлер, реагирующий на ввод телефона. Проверяет регуляркой введённый телефон на валидность.
+    Хэндлер, реагирующий на ввод телефона. Проверяет функцией "check_phone" введённый телефон на валидность.
     Записывает телефон в состояние пользователя, обновляет данные в модели пользователя (update_user)
     и вызывает функцию-обработчик save_call_request.
     """
 
-    is_phone_valid = re.fullmatch(r'^\+\d{11,20}', message.text)
-    if not is_phone_valid:
-        await message.answer('Номер телефона должен быть в формате +79012345678')
-    else:
+    phone_number = await check_phone(message)
+
+    if phone_number:
         async with state.proxy() as data:
-            data['user_phone'] = message.text
+            data['user_phone'] = phone_number
         states = await state.get_data()
         user = await update_user(user_id=states.get('user_id'),
                                  full_name=states.get('user_fullname'),

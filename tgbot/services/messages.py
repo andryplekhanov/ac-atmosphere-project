@@ -23,6 +23,9 @@ async def send_messages_new_call_request(message: Message, fullname: str,
                                             f'чтобы она не затерялась.</i>',
                                        parse_mode='html'
                                        )
+        await message.bot.send_contact(chat_id=admin_dict.get('tg_id'),
+                                       first_name=fullname,
+                                       phone_number=phone_number)
 
 
 async def send_messages_new_mess(message: Message, user_fullname: str) -> None:
