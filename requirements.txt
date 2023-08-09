@@ -27,3 +27,5 @@ redis==4.6.0
 django-mptt==0.14.0
 django-mptt-admin==2.5.1
 Pillow==10.0.0
+requests~=2.31.0
+beautifulsoup4~=4.12.2

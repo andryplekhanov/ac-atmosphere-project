@@ -50,15 +50,19 @@ class CompanySettings(SingletonModel):
 
 class CurrencySettings(SingletonModel):
     use_fix_exchange_rate = models.BooleanField(default=False, verbose_name='использовать фиксированный курс доллара')
-    exchange_rate = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True,
-                                        verbose_name='курс доллара', db_index=True)
+    fixed_exchange_rate = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True,
+                                              verbose_name='задать фиксированный курс доллара', db_index=True)
+    current_rate = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True,
+                                       verbose_name='текущий курс доллара', db_index=True)
+    updated = models.DateTimeField(auto_now=True, verbose_name='дата обновления')
+
 
     @property
     @admin.display(description='текущий курс')
     def dollar_exchange_rate(self):
         if self.use_fix_exchange_rate:
-            return self.exchange_rate
-        return get_exchange_rate()
+            return self.fixed_exchange_rate
+        return self.current_rate
 
     def __str__(self):
         return str(f'{self.dollar_exchange_rate}')
