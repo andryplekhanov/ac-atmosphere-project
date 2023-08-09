@@ -20,4 +20,3 @@ class UsersStates(StatesGroup):
     user_fullname = State()
     user_phone = State()
     current_page = State()
-    user = State()

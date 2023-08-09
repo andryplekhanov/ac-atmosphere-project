@@ -1,4 +1,7 @@
-import asyncio, django, logging, os
+import asyncio
+import django
+import logging
+import os
 
 from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
@@ -56,11 +59,8 @@ async def main():
     setup_django()
     config = load_config(".env")
 
-    storage = RedisStorage2(
-        host=config.redis.host,
-        port=config.redis.port,
-        password=config.redis.password
-    ) if config.tg_bot.use_redis else MemoryStorage()
+    storage = RedisStorage2(config.redis.host, config.redis.port, db=5, pool_size=10, prefix='bot_fsm') \
+        if config.redis.use_redis else MemoryStorage()
 
     bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
     dp = Dispatcher(bot, storage=storage)
