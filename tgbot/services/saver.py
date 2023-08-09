@@ -3,21 +3,23 @@ from typing import Union
 from aiogram.dispatcher import FSMContext
 from aiogram.types import Message, CallbackQuery
 
-from app_telegram.models import TGUser
 from tgbot.models.commands import add_call_request, update_user
 from tgbot.services.messages import send_messages_new_call_request, send_messages_new_mess
 
 
-async def save_call_request(user: TGUser, message: Union[Message, CallbackQuery], state: FSMContext) -> None:
+async def save_call_request(message: Union[Message, CallbackQuery], state: FSMContext) -> None:
     """
     Функция-обработчик.
     Вызывает функцию, создающую новую заявку на звонок (add_call_request).
     Если заявка была успешно создана, вызывает функцию, отправляющую сообщения (send_messages_new_call_request).
     """
 
-    call_request = await add_call_request(user=user)
+    states = await state.get_data()
+
+    call_request = await add_call_request(user_id=states.get('user_id'))
     if call_request:
-        await send_messages_new_call_request(message, user.fullname, user.phone_number, call_request.id)
+        await send_messages_new_call_request(message, states.get('user_fullname'), states.get('user_phone'),
+                                             call_request.id)
     else:
         await message.answer('Произошла ошибка. Попробуйте ввести команду /call ещё раз')
     await state.reset_state(with_data=False)

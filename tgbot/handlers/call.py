@@ -27,7 +27,8 @@ async def call(message: Message, state: FSMContext) -> None:
         await UsersStates.user_fullname.set()
     else:
         async with state.proxy() as data:
-            data['user'] = user
+            data['user_fullname'] = user.fullname
+            data['user_phone'] = user.phone_number
         await message.answer(f'Ваше имя: <b>{user.fullname}</b>\n'
                              f'Ваш телефон: <b>{user.phone_number}</b>\n'
                              f'💡 Всё верно?',
@@ -57,7 +58,7 @@ async def confirm_personal_data(call: CallbackQuery, state: FSMContext) -> None:
     states = await state.get_data()
     try:
         if states.get('last_command') == 'call':
-            await save_call_request(user=states.get('user'), message=call.message, state=state)
+            await save_call_request(message=call.message, state=state)
         elif states.get('last_command') == 'mess':
             await save_message(call.message, state)
     except Exception:
@@ -98,10 +99,10 @@ async def get_phone(message: Message, state: FSMContext) -> None:
         async with state.proxy() as data:
             data['user_phone'] = phone_number
         states = await state.get_data()
-        user = await update_user(user_id=states.get('user_id'),
-                                 full_name=states.get('user_fullname'),
-                                 phone=states.get('user_phone'))
-        await save_call_request(user, message, state)
+        await update_user(user_id=states.get('user_id'),
+                          full_name=states.get('user_fullname'),
+                          phone=states.get('user_phone'))
+        await save_call_request(message, state)
 
 
 def register_call(dp: Dispatcher):

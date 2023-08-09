@@ -43,10 +43,11 @@ def update_user(user_id: int, full_name: str, phone: str) -> TGUser:
 
 
 @sync_to_async
-def add_call_request(user: TGUser) -> Union[CallRequest, None]:
+def add_call_request(user_id: int) -> Union[CallRequest, None]:
     """ Создаёт заявку на звонок. Возвращает объект CallRequest или None. """
 
     try:
+        user = TGUser.objects.get(tg_id=user_id)
         call = CallRequest.objects.create(from_user=user)
         logger.info(f"CallRequest from {user} was added to DB")
         return call
