@@ -10,10 +10,13 @@
 ```bash
 # смонтировать контейнер:
 docker-compose build
+
 # запустить контейнер:
 docker-compose up -d
+
 # остановить контейнер:
-docker-compose down
+docker-compose stop
+
 # если в код были внесены изменения, необходимо заново смонтировать контейнер
 ```
 
@@ -21,20 +24,17 @@ docker-compose down
 ## Миграции
 Команды выполняются при запущенном контейнере
 ```bash
-# создание миграций
+# создание миграций:
 docker-compose exec web sh -c "python manage.py makemigrations"
-# применение миграций
+
+# применение миграций:
 docker-compose exec web sh -c "python manage.py migrate"
-# создание суперпользователя
+
+# создание суперпользователя:
 docker-compose exec web sh -c "python manage.py createsuperuser"
+
+# загрузка фикстур в БД:
+docker-compose exec web sh -c "python manage.py loaddata fixtures/db.json"
 ```
 
 Теперь можно перейти на http://0.0.0.0:8000/admin/ и войти в админку под суперпользователем
-
-## Просмотр БД через Adminer
-Посетите http://localhost:8080/ и введите следующие параметры:
-- System: PostgreSQL
-- Server: db
-- Username: postgres
-- Password: postgres
-- Database: template-db
