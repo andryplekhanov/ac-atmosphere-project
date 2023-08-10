@@ -1,10 +1,20 @@
+import logging
 from decimal import Decimal
 
 import requests
 from bs4 import BeautifulSoup
 
+from app_settings.models import CurrencySettings
 
-def scrap_rate() -> float:
+logger = logging.getLogger(__name__)
+
+
+def scrap_rate() -> Decimal:
+    """
+    Веб-скраппер. Забирает курс доллара к рублю с сайта google.ru.
+    Если скраппинг не удался, возвращает 0.0
+    """
+
     headers = {
         'authority': 'www.kith.com',
         'cache-control': 'max-age=0',
@@ -23,17 +33,27 @@ def scrap_rate() -> float:
     response = session.get(url=url, headers=headers)
 
     if response.status_code == 200:
+        logger.info(f"Parsing ex rate: response.status_code == 200")
         try:
             soup = BeautifulSoup(response.text, 'html.parser')
             dollar_rate = soup.find_all('span', class_='DFlfde SwHCTb')[0]
             dollar_rate = dollar_rate.text.replace(',', '.')
-            return float(dollar_rate)
-        except Exception:
-            return 0.0
+            return Decimal.from_float(float(dollar_rate)).quantize(Decimal("1.00"))
+        except Exception as ex:
+            logger.error(f"Parsing ex rate: FAIL: {ex}")
+            return Decimal.from_float(0.0).quantize(Decimal("1.00"))
     else:
-        return 0.0
+        logger.error(f"Parsing ex rate: FAIL")
+        return Decimal.from_float(0.0).quantize(Decimal("1.00"))
 
 
 def get_exchange_rate():
+    """
+    Функция вызывает скраппер курса доллара (scrap_rate) и обновляет данные модели CurrencySettings.
+    """
+
     exchange_rate = scrap_rate()
-    return Decimal.from_float(exchange_rate).quantize(Decimal("1.00"))
+    try:
+        CurrencySettings.objects.update_or_create(current_rate=exchange_rate)
+    except Exception as ex:
+        logger.error(f"get_exchange_rate: FAIL: {ex}")

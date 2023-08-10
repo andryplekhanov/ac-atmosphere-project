@@ -1,8 +1,6 @@
 from django.contrib import admin
 from django.db import models
 
-from app_settings.exchange_rate_parser import get_exchange_rate
-
 
 class SingletonModel(models.Model):
     """

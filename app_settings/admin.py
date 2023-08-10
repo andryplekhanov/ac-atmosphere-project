@@ -21,7 +21,7 @@ class CurrencySettingsAdmin(admin.ModelAdmin):
     """ В админ-панели нужно создать экземпляр с настройками """
 
     list_display = ['dollar_exchange_rate', 'updated']
-    readonly_fields = ["current_rate", ]
+    readonly_fields = ["current_rate", 'updated']
     save_on_top = True
 
     def has_add_permission(self, request, obj=None):
