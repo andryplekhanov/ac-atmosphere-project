@@ -8,7 +8,7 @@ class ImageInline(admin.TabularInline):
     model = Image
 
 
-class ParameterValueInline(admin.TabularInline):
+class ParameterInline(admin.TabularInline):
     model = Parameter.products.through
 
 
@@ -23,7 +23,7 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ['title', ]
     save_on_top = True
     ordering = ['-created', ]
-    inlines = [ImageInline, ParameterValueInline]
+    inlines = [ImageInline, ParameterInline]
 
     def get_short_title(self, obj):
         if len(obj.title) <= 50:

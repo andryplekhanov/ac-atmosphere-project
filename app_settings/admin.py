@@ -1,6 +1,13 @@
 from django.contrib import admin
 
 from app_settings.models import AdminItem, AdminsSettings, CompanySettings, CurrencySettings
+from django_celery_beat.models import (
+    IntervalSchedule,
+    CrontabSchedule,
+    SolarSchedule,
+    ClockedSchedule,
+    PeriodicTask,
+)
 
 
 class CompanySettingsAdmin(admin.ModelAdmin):
@@ -55,6 +62,11 @@ class AdminsSettingsAdmin(admin.ModelAdmin):
         return False
 
 
+admin.site.unregister(SolarSchedule)
+admin.site.unregister(ClockedSchedule)
+admin.site.unregister(PeriodicTask)
+admin.site.unregister(IntervalSchedule)
+admin.site.unregister(CrontabSchedule)
 admin.site.register(CompanySettings, CompanySettingsAdmin)
 admin.site.register(AdminsSettings, AdminsSettingsAdmin)
 admin.site.register(CurrencySettings, CurrencySettingsAdmin)

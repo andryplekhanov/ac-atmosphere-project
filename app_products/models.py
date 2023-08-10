@@ -7,6 +7,7 @@ from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 
 from app_products.validators import image_size_validate
+from app_settings.models import CurrencySettings
 
 image_validator = FileExtensionValidator(
         allowed_extensions=['png', 'jpg', 'jpeg', 'gif', 'svg'],
@@ -69,15 +70,12 @@ class Product(models.Model):
     @admin.display(description='цена (руб)')
     def total_price(self):
         if self.use_dollars:
-            dollar_course = 92.34
-            dollar_price = float(self.price_dollar) if self.price_dollar else 0
-            total_cost = dollar_price * dollar_course
-            return Decimal.from_float(total_cost).quantize(Decimal("1.00"))
+            dollar_settings = CurrencySettings.objects.all().first()
+            dollar_price = self.price_dollar if self.price_dollar else Decimal.from_float(0.0)
+            total_cost = dollar_price * dollar_settings.dollar_exchange_rate
+            return total_cost.quantize(Decimal("1.00"))
         else:
-            return self.price_rub if self.price_rub else 0
-
-    # def get_absolute_url(self):
-    #     return reverse('good', args=[str(self.id)])
+            return self.price_rub if self.price_rub else Decimal.from_float(0.0)
 
 
 class Image(models.Model):
