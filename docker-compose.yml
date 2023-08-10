@@ -57,12 +57,29 @@ services:
     volumes:
       - ./redis.conf:/usr/local/etc/redis/redis.conf
 
+  celery:
+    build:
+      dockerfile: Dockerfile.web
+      context: .
+    command: celery -A dj_ac worker -l info
+    volumes:
+      - .:/usr/src/app/${PROJECT_NAME:-web}
+    depends_on:
+      - redis
+    env_file:
+      - ./.env
 
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
+  celery-beat:
+    build:
+      dockerfile: Dockerfile.web
+      context: .
+    command: celery -A dj_ac beat -l info
+    volumes:
+      - .:/usr/src/app/${PROJECT_NAME:-web}
+    env_file:
+      - ./.env
+    depends_on:
+      - redis
 
 volumes:
   postgres_data:
