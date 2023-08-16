@@ -20,3 +20,9 @@ class UsersStates(StatesGroup):
     user_fullname = State()
     user_phone = State()
     current_page = State()
+
+
+class ProductStates(StatesGroup):
+    current_stage = State()
+    product_id = State()
+    current_page = State()

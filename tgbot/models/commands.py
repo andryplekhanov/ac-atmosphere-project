@@ -6,11 +6,12 @@ os.environ.update({'DJANGO_ALLOW_ASYNC_UNSAFE': "true"})
 django.setup()
 
 import logging
-
 from typing import Union
 
 from asgiref.sync import sync_to_async
+from django.db.models import QuerySet
 
+from app_products.models import Category
 from app_settings.models import AdminItem
 from app_telegram.models import TGUser, CallRequest
 
@@ -84,3 +85,12 @@ def get_banned_ids() -> list[int]:
 
     banned_users = TGUser.objects.filter(is_banned=True).only('tg_id')
     return [user.tg_id for user in banned_users]
+
+
+@sync_to_async
+def get_categories() -> QuerySet:
+    """
+    Получает
+    """
+
+    return Category.objects.all()

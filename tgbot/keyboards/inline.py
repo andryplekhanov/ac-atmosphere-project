@@ -1,5 +1,7 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from django.db.models import QuerySet
 
+from tgbot.misc.factories import for_cat
 
 # Клавиатура с выбором действия
 personal_data_choice = InlineKeyboardMarkup(
@@ -12,3 +14,14 @@ personal_data_choice = InlineKeyboardMarkup(
         ],
     ]
 )
+
+
+def categories_choice(categories: QuerySet) -> InlineKeyboardMarkup:
+    keyboard = InlineKeyboardMarkup()
+    for category in categories:
+        if not category.parent:
+            keyboard.add(InlineKeyboardButton(
+                text=f'👉 {category.name}',
+                callback_data=for_cat.new(category_id=category.id)
+            ))
+    return keyboard
