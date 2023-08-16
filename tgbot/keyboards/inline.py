@@ -1,7 +1,6 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from django.db.models import QuerySet
 
-from tgbot.misc.factories import for_cat
+from tgbot.misc.factories import for_cat, for_prod
 
 # Клавиатура с выбором действия
 personal_data_choice = InlineKeyboardMarkup(
@@ -16,12 +15,29 @@ personal_data_choice = InlineKeyboardMarkup(
 )
 
 
-def categories_choice(categories: QuerySet) -> InlineKeyboardMarkup:
+async def main_categories_choice(categories: dict) -> InlineKeyboardMarkup:
     keyboard = InlineKeyboardMarkup()
-    for category in categories:
-        if not category.parent:
+    for cat_id, cat_data in categories.items():
+        if cat_data.get('parent_id') == 0:
             keyboard.add(InlineKeyboardButton(
-                text=f'👉 {category.name}',
-                callback_data=for_cat.new(category_id=category.id)
+                text=f"👉 {cat_data.get('name')}",
+                callback_data=for_cat.new(category_id=cat_id)
+            ))
+    return keyboard
+
+
+async def categories_choice(categories: dict, products: dict) -> InlineKeyboardMarkup:
+    keyboard = InlineKeyboardMarkup()
+    if categories:
+        for cat_id, cat_data in categories.items():
+            keyboard.add(InlineKeyboardButton(
+                text=f"👉 {cat_data.get('name')}",
+                callback_data=for_cat.new(category_id=cat_id)
+            ))
+    if products:
+        for prod_id, prod_data in products.items():
+            keyboard.add(InlineKeyboardButton(
+                text=f"{prod_data.get('title')} (💰 {prod_data.get('total_price')} руб.)",
+                callback_data=for_prod.new(product_id=prod_id)
             ))
     return keyboard

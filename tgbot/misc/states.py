@@ -23,6 +23,7 @@ class UsersStates(StatesGroup):
 
 
 class ProductStates(StatesGroup):
+    categories = State()
     current_stage = State()
     product_id = State()
     current_page = State()
