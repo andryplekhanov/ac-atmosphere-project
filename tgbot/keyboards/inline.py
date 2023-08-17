@@ -1,6 +1,6 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-from tgbot.misc.factories import for_cat, for_prod
+from tgbot.misc.factories import for_cat, for_prod, for_back
 
 # Клавиатура с выбором действия
 personal_data_choice = InlineKeyboardMarkup(
@@ -26,7 +26,7 @@ async def main_categories_choice(categories: dict) -> InlineKeyboardMarkup:
     return keyboard
 
 
-async def categories_choice(categories: dict, products: dict) -> InlineKeyboardMarkup:
+async def categories_choice(categories: dict, products: dict, cat: int) -> InlineKeyboardMarkup:
     keyboard = InlineKeyboardMarkup()
     if categories:
         for cat_id, cat_data in categories.items():
@@ -40,4 +40,8 @@ async def categories_choice(categories: dict, products: dict) -> InlineKeyboardM
                 text=f"{prod_data.get('title')} (💰 {prod_data.get('total_price')} руб.)",
                 callback_data=for_prod.new(product_id=prod_id)
             ))
+    keyboard.add(InlineKeyboardButton(
+        text=f"<< Назад",
+        callback_data=for_back.new(prev_cat=cat)
+    ))
     return keyboard

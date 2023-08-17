@@ -1,6 +1,10 @@
-from aiogram.types import Message
+import os
+from typing import Union
 
-from tgbot.models.commands import get_all_admins
+from aiogram.types import Message, CallbackQuery, ChatActions, MediaGroup, InputFile
+
+from dj_ac.settings import BASE_DIR
+from tgbot.models.commands import get_all_admins, get_product_detail
 
 
 async def send_messages_new_call_request(message: Message, fullname: str,
@@ -35,3 +39,33 @@ async def send_messages_new_mess(message: Message, user_fullname: str) -> None:
     admins = await get_all_admins()
     for admin_dict in admins:
         await message.answer(f"{admin_dict.get('name')}\n@{admin_dict.get('username')}")
+
+
+async def print_product_detail(message: Union[Message, CallbackQuery], prod_id: int) -> None:
+    """
+    Печатает сообщение с детальной информацией о товаре и кнопками с возможностью заказать.
+    """
+
+    product = await get_product_detail(prod_id)
+    text = f"<b>{product.title}</b>\n\n💰 Цена: <code>{product.total_price} руб.</code>\n\n<i>{product.description}</i>"
+
+    if product.images.all():
+        await message.edit_text('Загружаю фото...')
+        await ChatActions.upload_photo()
+
+        if len(product.images.all()) == 1:
+            url = os.path.join(BASE_DIR, 'media', str(product.images.first().image))
+            await message.bot.send_photo(chat_id=message.chat.id,
+                                         photo=InputFile(url),
+                                         caption=text,
+                                         parse_mode='html')
+        else:
+            media = MediaGroup()
+            media.attach_photo(photo=InputFile(os.path.join(BASE_DIR, 'media', str(product.images.first().image))),
+                               caption=text,
+                               parse_mode='html')
+            for img in product.images.all()[1:]:
+                media.attach_photo(InputFile(os.path.join(BASE_DIR, 'media', str(img.image))))
+            await message.bot.send_media_group(chat_id=message.chat.id, media=media)
+    else:
+        await message.answer(text, parse_mode='html')
