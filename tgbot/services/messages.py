@@ -47,7 +47,10 @@ async def print_product_detail(message: Union[Message, CallbackQuery], prod_id: 
     """
 
     product = await get_product_detail(prod_id)
-    text = f"<b>{product.title}</b>\n\n💰 Цена: <code>{product.total_price} руб.</code>\n\n<i>{product.description}</i>"
+    text = (f"<b>{product.title}</b>\n\n"
+            f"📦 Наличие: <code>{product.avaliable_status}</code>\n"
+            f"💰 Цена: <code>{product.total_price} руб.</code>\n\n"
+            f"<i>{product.description}</i>")
 
     if product.images.all():
         await message.edit_text('Загружаю фото...')

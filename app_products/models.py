@@ -1,4 +1,5 @@
 from decimal import Decimal
+from enum import Enum
 
 from django.contrib import admin
 from django.core.validators import FileExtensionValidator
@@ -65,6 +66,10 @@ class Product(models.Model):
 
     def __str__(self):
         return f"id: {self.id}, {self.title}"
+
+    @property
+    def avaliable_status(self):
+        return [status[1] for status in self.AVAILABLE_CHOICES if status[0] == self.available][0]
 
     @property
     @admin.display(description='цена (руб)')
