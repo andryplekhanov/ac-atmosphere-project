@@ -7,7 +7,7 @@ from tgbot.keyboards.reply import share_phone
 from tgbot.misc.states import UsersStates
 from tgbot.models.commands import get_or_create_user, update_user
 from tgbot.services.checker import check_phone
-from tgbot.services.saver import save_call_request, save_message
+from tgbot.services.saver import save_call_request, save_message, save_order
 
 
 async def call(message: Message, state: FSMContext) -> None:
@@ -61,6 +61,8 @@ async def confirm_personal_data(call: CallbackQuery, state: FSMContext) -> None:
             await save_call_request(message=call.message, state=state)
         elif states.get('last_command') == 'mess':
             await save_message(call.message, state)
+        elif states.get('last_command') == 'menu':
+            await save_order(call.message, state)
     except Exception:
         await call.message.answer('🚫 <b>Что-то пошло не так.</b> Возможно, вы не ввели контактные данные.\n'
                                   'Нажмите команду <b>/start</b> и попробуйте еще раз.', parse_mode='html')
@@ -102,7 +104,12 @@ async def get_phone(message: Message, state: FSMContext) -> None:
         await update_user(user_id=states.get('user_id'),
                           full_name=states.get('user_fullname'),
                           phone=states.get('user_phone'))
-        await save_call_request(message, state)
+
+        states = await state.get_data()
+        if states.get('last_command') == 'call':
+            await save_call_request(message, state)
+        elif states.get('last_command') == 'menu':
+            await save_order(message, state)
 
 
 def register_call(dp: Dispatcher):

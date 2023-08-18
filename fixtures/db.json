@@ -1,0 +1,496 @@
+[
+  {
+    "model": "app_settings.companysettings",
+    "pk": 1,
+    "fields": {
+      "company": "Атмосфера",
+      "description": "Тили-тили, трали-вали.",
+      "email": null,
+      "phone_number": "+79036043900",
+      "phone_messengers": "+79601604639"
+    }
+  },
+  {
+    "model": "app_settings.currencysettings",
+    "pk": 23,
+    "fields": {
+      "use_fix_exchange_rate": false,
+      "fixed_exchange_rate": "30.00",
+      "current_rate": "93.57",
+      "updated": "2023-08-18T13:10:15.314Z"
+    }
+  },
+  {
+    "model": "app_settings.adminssettings",
+    "pk": 1,
+    "fields": {}
+  },
+  {
+    "model": "app_settings.adminitem",
+    "pk": 1,
+    "fields": {
+      "admins_settings": 1,
+      "name": "Иосиф",
+      "phone_number": "+79601604639",
+      "tg_id": 5563569442,
+      "username": "tov_stalin"
+    }
+  },
+  {
+    "model": "app_products.category",
+    "pk": 1,
+    "fields": {
+      "name": "Товары",
+      "slug": "tovary",
+      "parent": null,
+      "lft": 1,
+      "rght": 8,
+      "tree_id": 1,
+      "level": 0
+    }
+  },
+  {
+    "model": "app_products.category",
+    "pk": 2,
+    "fields": {
+      "name": "Услуги",
+      "slug": "uslugi",
+      "parent": null,
+      "lft": 1,
+      "rght": 2,
+      "tree_id": 2,
+      "level": 0
+    }
+  },
+  {
+    "model": "app_products.category",
+    "pk": 3,
+    "fields": {
+      "name": "Кондиционеры Rapid",
+      "slug": "tovary-rapid",
+      "parent": 1,
+      "lft": 2,
+      "rght": 3,
+      "tree_id": 1,
+      "level": 1
+    }
+  },
+  {
+    "model": "app_products.category",
+    "pk": 4,
+    "fields": {
+      "name": "Кондиционеры Samsung",
+      "slug": "kondicionery-samsung",
+      "parent": 1,
+      "lft": 6,
+      "rght": 7,
+      "tree_id": 1,
+      "level": 1
+    }
+  },
+  {
+    "model": "app_products.category",
+    "pk": 5,
+    "fields": {
+      "name": "Кондиционеры Candy",
+      "slug": "kondicionery-candy",
+      "parent": 1,
+      "lft": 4,
+      "rght": 5,
+      "tree_id": 1,
+      "level": 1
+    }
+  },
+  {
+    "model": "app_products.product",
+    "pk": 1,
+    "fields": {
+      "category": 2,
+      "title": "Техобслуживание",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "use_dollars": false,
+      "price_dollar": null,
+      "price_rub": "3000.00",
+      "available": "stock",
+      "created": "2023-08-10T12:32:07.209Z",
+      "updated": "2023-08-10T12:33:40.599Z"
+    }
+  },
+  {
+    "model": "app_products.product",
+    "pk": 2,
+    "fields": {
+      "category": 2,
+      "title": "Заправка фреоном",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "use_dollars": false,
+      "price_dollar": null,
+      "price_rub": "2999.00",
+      "available": "stock",
+      "created": "2023-08-10T12:32:44.690Z",
+      "updated": "2023-08-10T12:32:44.690Z"
+    }
+  },
+  {
+    "model": "app_products.product",
+    "pk": 3,
+    "fields": {
+      "category": 2,
+      "title": "Монтаж",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "use_dollars": false,
+      "price_dollar": null,
+      "price_rub": "4999.00",
+      "available": "stock",
+      "created": "2023-08-10T12:33:21.383Z",
+      "updated": "2023-08-10T12:33:21.383Z"
+    }
+  },
+  {
+    "model": "app_products.product",
+    "pk": 4,
+    "fields": {
+      "category": 2,
+      "title": "Ремонт",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "use_dollars": false,
+      "price_dollar": null,
+      "price_rub": "5999.00",
+      "available": "stock",
+      "created": "2023-08-10T12:35:31.347Z",
+      "updated": "2023-08-10T12:35:31.347Z"
+    }
+  },
+  {
+    "model": "app_products.product",
+    "pk": 5,
+    "fields": {
+      "category": 2,
+      "title": "Демонтаж",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "use_dollars": false,
+      "price_dollar": null,
+      "price_rub": "2599.00",
+      "available": "stock",
+      "created": "2023-08-10T12:36:20.485Z",
+      "updated": "2023-08-10T12:36:20.485Z"
+    }
+  },
+  {
+    "model": "app_products.product",
+    "pk": 6,
+    "fields": {
+      "category": 2,
+      "title": "Профилактика",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "use_dollars": false,
+      "price_dollar": null,
+      "price_rub": "1999.00",
+      "available": "stock",
+      "created": "2023-08-10T12:36:47.655Z",
+      "updated": "2023-08-10T12:36:47.655Z"
+    }
+  },
+  {
+    "model": "app_products.product",
+    "pk": 7,
+    "fields": {
+      "category": 2,
+      "title": "Закладка трассы",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "use_dollars": false,
+      "price_dollar": null,
+      "price_rub": "2700.00",
+      "available": "stock",
+      "created": "2023-08-10T12:37:37.473Z",
+      "updated": "2023-08-10T12:49:56.575Z"
+    }
+  },
+  {
+    "model": "app_products.product",
+    "pk": 8,
+    "fields": {
+      "category": 3,
+      "title": "Сплит-система Rapid RAM-07HJ/N1_23Y",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "use_dollars": true,
+      "price_dollar": "125.00",
+      "price_rub": null,
+      "available": "stock",
+      "created": "2023-08-10T13:16:06.975Z",
+      "updated": "2023-08-10T13:38:13.456Z"
+    }
+  },
+  {
+    "model": "app_products.product",
+    "pk": 9,
+    "fields": {
+      "category": 3,
+      "title": "Сплит-система Rapid RAM-57HJ/NК1_23е",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "use_dollars": true,
+      "price_dollar": "299.00",
+      "price_rub": null,
+      "available": "stock",
+      "created": "2023-08-10T13:36:12.029Z",
+      "updated": "2023-08-10T13:38:03.517Z"
+    }
+  },
+  {
+    "model": "app_products.product",
+    "pk": 10,
+    "fields": {
+      "category": 3,
+      "title": "Сплит-система Rapid RFM-07EJ/N1_21Y",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "use_dollars": true,
+      "price_dollar": "225.00",
+      "price_rub": null,
+      "available": "stock",
+      "created": "2023-08-10T13:49:24.702Z",
+      "updated": "2023-08-10T13:49:24.702Z"
+    }
+  },
+  {
+    "model": "app_products.product",
+    "pk": 11,
+    "fields": {
+      "category": 5,
+      "title": "Сплит-система Candy AC-07HTA03/R2",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "use_dollars": true,
+      "price_dollar": "260.00",
+      "price_rub": null,
+      "available": "stock",
+      "created": "2023-08-10T13:52:50.739Z",
+      "updated": "2023-08-10T13:52:50.740Z"
+    }
+  },
+  {
+    "model": "app_products.product",
+    "pk": 12,
+    "fields": {
+      "category": 5,
+      "title": "Сплит-система Candy AC-07HTA13/R22",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "use_dollars": true,
+      "price_dollar": "100.00",
+      "price_rub": null,
+      "available": "stock",
+      "created": "2023-08-10T14:13:18.925Z",
+      "updated": "2023-08-10T14:13:18.925Z"
+    }
+  },
+  {
+    "model": "app_products.product",
+    "pk": 13,
+    "fields": {
+      "category": 4,
+      "title": "Сплит-система Samsung AC-07HTA03/R2",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "use_dollars": true,
+      "price_dollar": "366.00",
+      "price_rub": null,
+      "available": "order",
+      "created": "2023-08-10T14:15:48.570Z",
+      "updated": "2023-08-10T14:15:48.570Z"
+    }
+  },
+  {
+    "model": "app_products.product",
+    "pk": 14,
+    "fields": {
+      "category": 4,
+      "title": "Сплит-система Samsung AC-57eeTA033/R2",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "use_dollars": true,
+      "price_dollar": "258.00",
+      "price_rub": null,
+      "available": "stock",
+      "created": "2023-08-10T14:19:53.617Z",
+      "updated": "2023-08-10T14:19:53.617Z"
+    }
+  },
+  {
+    "model": "app_products.product",
+    "pk": 15,
+    "fields": {
+      "category": 1,
+      "title": "Сплит-система Noname AC-57eeTA033/R2",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "use_dollars": true,
+      "price_dollar": "1000.00",
+      "price_rub": null,
+      "available": "stock",
+      "created": "2023-08-17T08:59:42.582Z",
+      "updated": "2023-08-17T08:59:42.582Z"
+    }
+  },
+  {
+    "model": "app_products.product",
+    "pk": 16,
+    "fields": {
+      "category": 1,
+      "title": "Сплит-система Noname AC-5642eeTA0773/R2",
+      "description": "🟢 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. \r\n\r\n🟢 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. \r\n\r\n🟢 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "use_dollars": true,
+      "price_dollar": "990.00",
+      "price_rub": null,
+      "available": "order",
+      "created": "2023-08-17T09:02:34.386Z",
+      "updated": "2023-08-18T09:35:08.379Z"
+    }
+  },
+  {
+    "model": "app_products.image",
+    "pk": 1,
+    "fields": {
+      "image": "products/2023/08/10/screen1.png",
+      "product": 8
+    }
+  },
+  {
+    "model": "app_products.image",
+    "pk": 2,
+    "fields": {
+      "image": "products/2023/08/10/screen2.png",
+      "product": 8
+    }
+  },
+  {
+    "model": "app_products.image",
+    "pk": 3,
+    "fields": {
+      "image": "products/2023/08/10/screen3.png",
+      "product": 8
+    }
+  },
+  {
+    "model": "app_products.image",
+    "pk": 4,
+    "fields": {
+      "image": "products/2023/08/10/screen4.png",
+      "product": 8
+    }
+  },
+  {
+    "model": "app_products.image",
+    "pk": 5,
+    "fields": {
+      "image": "products/2023/08/10/screen4_MLl20ty.png",
+      "product": 9
+    }
+  },
+  {
+    "model": "app_products.image",
+    "pk": 6,
+    "fields": {
+      "image": "products/2023/08/10/screen2_hkfAVrH.png",
+      "product": 9
+    }
+  },
+  {
+    "model": "app_products.image",
+    "pk": 7,
+    "fields": {
+      "image": "products/2023/08/10/screen2_BxoCd3J.png",
+      "product": 10
+    }
+  },
+  {
+    "model": "app_products.image",
+    "pk": 8,
+    "fields": {
+      "image": "products/2023/08/10/screen1_94Iz54F.png",
+      "product": 11
+    }
+  },
+  {
+    "model": "app_products.image",
+    "pk": 9,
+    "fields": {
+      "image": "products/2023/08/10/screen2_pRpIejX.png",
+      "product": 11
+    }
+  },
+  {
+    "model": "app_products.image",
+    "pk": 10,
+    "fields": {
+      "image": "products/2023/08/10/screen3_JzwYUn7.png",
+      "product": 11
+    }
+  },
+  {
+    "model": "app_products.image",
+    "pk": 11,
+    "fields": {
+      "image": "products/2023/08/10/screen4_ACxOftq.png",
+      "product": 11
+    }
+  },
+  {
+    "model": "app_products.image",
+    "pk": 12,
+    "fields": {
+      "image": "products/2023/08/10/screen1_gH2aOmk.png",
+      "product": 13
+    }
+  },
+  {
+    "model": "app_products.image",
+    "pk": 13,
+    "fields": {
+      "image": "products/2023/08/10/screen3_x0lMtBN.png",
+      "product": 13
+    }
+  },
+  {
+    "model": "app_products.image",
+    "pk": 14,
+    "fields": {
+      "image": "products/2023/08/10/screen1_bs39ksA.png",
+      "product": 14
+    }
+  },
+  {
+    "model": "app_products.image",
+    "pk": 15,
+    "fields": {
+      "image": "products/2023/08/10/screen3_9rmEAWF.png",
+      "product": 14
+    }
+  },
+  {
+    "model": "app_products.image",
+    "pk": 16,
+    "fields": {
+      "image": "products/2023/08/10/screen2_6epNCU6.png",
+      "product": 14
+    }
+  },
+  {
+    "model": "app_products.image",
+    "pk": 17,
+    "fields": {
+      "image": "products/2023/08/10/screen4_o0zERzh.png",
+      "product": 14
+    }
+  },
+  {
+    "model": "app_products.image",
+    "pk": 18,
+    "fields": {
+      "image": "products/2023/08/17/photo_2023-08-05_16.59.26.jpeg",
+      "product": 15
+    }
+  },
+  {
+    "model": "app_products.image",
+    "pk": 19,
+    "fields": {
+      "image": "products/2023/08/17/124066-padenie-karmannye_kompyutery-voda-apple-yabloko-3840x2160.jpeg",
+      "product": 15
+    }
+  }
+]
