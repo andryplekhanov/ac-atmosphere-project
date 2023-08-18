@@ -11,7 +11,7 @@ app.autodiscover_tasks()
 # заносим таски в очередь
 app.conf.beat_schedule = {
     'Parser': {'task': 'app_settings.tasks.get_rate',
-               'schedule': crontab(minute='*/1440')},
+               'schedule': crontab(minute='*/5')},
 
 }
 
