@@ -11,16 +11,6 @@
     }
   },
   {
-    "model": "app_settings.currencysettings",
-    "pk": 23,
-    "fields": {
-      "use_fix_exchange_rate": false,
-      "fixed_exchange_rate": "30.00",
-      "current_rate": "93.57",
-      "updated": "2023-08-18T13:10:15.314Z"
-    }
-  },
-  {
     "model": "app_settings.adminssettings",
     "pk": 1,
     "fields": {}

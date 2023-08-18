@@ -1,15 +1,17 @@
-# Не менять порядок импортов
+# Не менять порядок импортов...
 import os, django
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dj_ac.settings")
 os.environ.update({'DJANGO_ALLOW_ASYNC_UNSAFE': "true"})
 django.setup()
+# ... до сюда.
 
 import logging
 from typing import Union
 
 from asgiref.sync import sync_to_async
 
+from app_orders.models import Order, OrderItem
 from app_products.models import Category, Product
 from app_settings.models import AdminItem
 from app_telegram.models import TGUser, CallRequest
@@ -53,6 +55,22 @@ def add_call_request(user_id: int) -> Union[CallRequest, None]:
         return call
     except Exception as ex:
         logger.error(f"FAIL. CallRequest from {user} was NOT added to DB: {ex}")
+        return None
+
+
+@sync_to_async
+def add_order(user_id: int, product_id: int, address: str) -> Union[Order, None]:
+    """ Создаёт заказ. Возвращает объект Order или None. """
+
+    try:
+        user = TGUser.objects.get(tg_id=user_id)
+        order = Order.objects.create(user=user, address=address)
+        product = Product.objects.get(id=product_id)
+        OrderItem.objects.create(order=order, product=product, price=product.total_price)
+        logger.info(f"Order from {user} was added to DB")
+        return order
+    except Exception as ex:
+        logger.error(f"FAIL. Order from {user} was NOT added to DB: {ex}")
         return None
 
 

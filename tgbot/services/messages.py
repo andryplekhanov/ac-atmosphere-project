@@ -33,6 +33,36 @@ async def send_messages_new_call_request(message: Message, fullname: str,
                                        phone_number=phone_number)
 
 
+async def send_messages_new_order(message: Message, fullname: str, phone_number: str,
+                                  order_id: int, order_cost, order_items) -> None:
+    """ Отправляет сообщения об успешном заказе пользователю и админам бота. """
+
+    items_str = '\n- '.join([item.product.title for item in order_items])
+    await message.answer(f'👍 {fullname}, заявка №{order_id} успешно создана.\n'
+                         f'<b>Состав заказа:</b> <code>{items_str}</code>\n'
+                         f'<b>Стоимость:</b> <code>{order_cost} руб.</code>\n'
+                         f'Ожидайте звонка на номер {phone_number}.',
+                         parse_mode='html')
+
+    admins = await get_all_admins()
+    for admin_dict in admins:
+        await message.bot.send_message(chat_id=admin_dict.get('tg_id'),
+                                       text=f'<b>🔥 Уведомление для администратора!</b>\n'
+                                            f'Новый заказ №{order_id}:\n\n'
+                                            f'<code>{fullname}\n'
+                                            f'{phone_number}\n'
+                                            f'Состав заказа: {items_str}\n'
+                                            f'Стоимость: {order_cost} руб.</code>\n\n'
+                                            f'<i>Заказ сохранен в базе. '
+                                            f'Рекомендуется зайти в админ-панель и отметить его статус, '
+                                            f'чтобы он не затерялся.</i>',
+                                       parse_mode='html'
+                                       )
+        await message.bot.send_contact(chat_id=admin_dict.get('tg_id'),
+                                       first_name=fullname,
+                                       phone_number=phone_number)
+
+
 async def send_messages_new_mess(message: Message, user_fullname: str) -> None:
     """ Отпраляет сообщение с контактами администраторов """
 

@@ -4,10 +4,11 @@ from aiogram.types import Message, CallbackQuery
 
 from tgbot.keyboards.inline import main_categories_choice, categories_choice, personal_data_choice
 from tgbot.misc.factories import for_cat, for_back, for_prod, for_order
-from tgbot.misc.states import UsersStates
+from tgbot.misc.states import UsersStates, ProductStates
 from tgbot.models.commands import get_categories, get_or_create_user
 from tgbot.services.getters import get_subcats_and_products, get_parent_id
 from tgbot.services.messages import print_product_detail
+from tgbot.services.saver import save_order
 
 
 async def menu(message: Message, state: FSMContext) -> None:
@@ -86,9 +87,16 @@ async def make_order(call: CallbackQuery, state: FSMContext, callback_data: dict
     # await call.message.delete()
 
 
+async def get_address(message: Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['address'] = message.text
+    await save_order(message, state)
+
+
 def register_menu(dp: Dispatcher):
     dp.register_message_handler(menu, commands=["menu"], state="*", is_banned=False)
+    dp.register_message_handler(get_address, state=ProductStates.address)
     dp.register_callback_query_handler(get_category, for_cat.filter(), state="*", is_banned=False)
     dp.register_callback_query_handler(get_back, for_back.filter(), state="*")
     dp.register_callback_query_handler(get_product_detail, for_prod.filter(), state="*")
-    dp.register_callback_query_handler(make_order, for_order.filter(), state="*")
+    dp.register_callback_query_handler(make_order, for_order.filter(), state="*", is_banned=False)

@@ -11,8 +11,6 @@ class UsersStates(StatesGroup):
         user_id (int): id пользователя вTelegram.
         user_fullname (str): ФИО в Telegram.
         user_phone (str): номер телефона.
-        current_page (int): текущая страница пагинации.
-        user (TGUser): пользователь
     """
 
     last_command = State()
@@ -22,5 +20,16 @@ class UsersStates(StatesGroup):
 
 
 class ProductStates(StatesGroup):
+    """
+    Класс реализует состояние пользователя внутри сценария.
+    Атрибуты заполняются во время опроса пользователя. Очищаются при каждой новой команде.
+
+    Attributes:
+        categories (dict): категории товаров из БД
+        product_id (int): id продукта для заказа
+        address (str): адрес доставки
+    """
+
     categories = State()
     product_id = State()
+    address = State()
