@@ -32,7 +32,11 @@ async def get_back(call: CallbackQuery, state: FSMContext, callback_data: dict) 
     await call.message.edit_reply_markup(reply_markup=None)
 
     cat_id = int(callback_data.get('prev_cat'))
-    parent_id = await get_parent_id(current_cat=cat_id, state=state)
+    if callback_data.get('section') == 'cat':
+        parent_id = await get_parent_id(current_cat=cat_id, state=state)
+    else:
+        parent_id = cat_id
+
     if parent_id == 0:
         states = await state.get_data()
         cats = states.get('categories')
@@ -49,7 +53,8 @@ async def get_product_detail(call: CallbackQuery, state: FSMContext, callback_da
     await call.message.edit_reply_markup(reply_markup=None)
 
     prod_id = int(callback_data.get('product_id'))
-    await print_product_detail(message=call.message, prod_id=prod_id)
+    cat_id = int(callback_data.get('prev_cat'))
+    await print_product_detail(message=call.message, prod_id=prod_id, parent_id=cat_id)
 
     await call.message.delete()
 

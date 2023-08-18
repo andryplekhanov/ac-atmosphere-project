@@ -4,6 +4,7 @@ from typing import Union
 from aiogram.types import Message, CallbackQuery, ChatActions, MediaGroup, InputFile
 
 from dj_ac.settings import BASE_DIR
+from tgbot.keyboards.inline import product_detail
 from tgbot.models.commands import get_all_admins, get_product_detail
 
 
@@ -41,7 +42,7 @@ async def send_messages_new_mess(message: Message, user_fullname: str) -> None:
         await message.answer(f"{admin_dict.get('name')}\n@{admin_dict.get('username')}")
 
 
-async def print_product_detail(message: Union[Message, CallbackQuery], prod_id: int) -> None:
+async def print_product_detail(message: Union[Message, CallbackQuery], prod_id: int, parent_id: int) -> None:
     """
     Печатает сообщение с детальной информацией о товаре и кнопками с возможностью заказать.
     """
@@ -61,14 +62,13 @@ async def print_product_detail(message: Union[Message, CallbackQuery], prod_id: 
             await message.bot.send_photo(chat_id=message.chat.id,
                                          photo=InputFile(url),
                                          caption=text,
-                                         parse_mode='html')
+                                         parse_mode='html',
+                                         reply_markup=await product_detail(prod_id, parent_id))
         else:
             media = MediaGroup()
-            media.attach_photo(photo=InputFile(os.path.join(BASE_DIR, 'media', str(product.images.first().image))),
-                               caption=text,
-                               parse_mode='html')
-            for img in product.images.all()[1:]:
+            for img in product.images.all():
                 media.attach_photo(InputFile(os.path.join(BASE_DIR, 'media', str(img.image))))
             await message.bot.send_media_group(chat_id=message.chat.id, media=media)
+            await message.answer(text, parse_mode='html', reply_markup=await product_detail(prod_id, parent_id))
     else:
-        await message.answer(text, parse_mode='html')
+        await message.answer(text, parse_mode='html', reply_markup=await product_detail(prod_id, parent_id))
