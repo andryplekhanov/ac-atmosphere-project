@@ -1,15 +1,11 @@
 from django.contrib import admin
 from django_mptt_admin.admin import DjangoMpttAdmin
 
-from app_products.models import Category, Product, Image, Parameter, ParameterName, ParameterValue
+from app_products.models import Category, Product, Image
 
 
 class ImageInline(admin.TabularInline):
     model = Image
-
-
-class ParameterInline(admin.TabularInline):
-    model = Parameter.products.through
 
 
 class CategoryAdmin(DjangoMpttAdmin):
@@ -23,7 +19,7 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ['title', ]
     save_on_top = True
     ordering = ['-created', ]
-    inlines = [ImageInline, ParameterInline]
+    inlines = [ImageInline, ]
 
     def get_short_title(self, obj):
         if len(obj.title) <= 50:
@@ -32,14 +28,5 @@ class ProductAdmin(admin.ModelAdmin):
     get_short_title.short_description = 'заголовок'
 
 
-class ParameterAdmin(admin.ModelAdmin):
-    list_display = ['parameter', 'value', ]
-    list_filter = ['parameter']
-    save_on_top = True
-
-
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Product, ProductAdmin)
-admin.site.register(Parameter, ParameterAdmin)
-admin.site.register(ParameterName)
-admin.site.register(ParameterValue)

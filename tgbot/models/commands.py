@@ -1,16 +1,18 @@
-# Не менять порядок импортов
+# Не менять порядок импортов...
 import os, django
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dj_ac.settings")
 os.environ.update({'DJANGO_ALLOW_ASYNC_UNSAFE': "true"})
 django.setup()
+# ... до сюда.
 
 import logging
-
 from typing import Union
 
 from asgiref.sync import sync_to_async
 
+from app_orders.models import Order, OrderItem
+from app_products.models import Category, Product
 from app_settings.models import AdminItem
 from app_telegram.models import TGUser, CallRequest
 
@@ -57,6 +59,22 @@ def add_call_request(user_id: int) -> Union[CallRequest, None]:
 
 
 @sync_to_async
+def add_order(user_id: int, product_id: int, address: str) -> Union[Order, None]:
+    """ Создаёт заказ. Возвращает объект Order или None. """
+
+    try:
+        user = TGUser.objects.get(tg_id=user_id)
+        order = Order.objects.create(user=user, address=address)
+        product = Product.objects.get(id=product_id)
+        OrderItem.objects.create(order=order, product=product, price=product.total_price)
+        logger.info(f"Order from {user} was added to DB")
+        return order
+    except Exception as ex:
+        logger.error(f"FAIL. Order from {user} was NOT added to DB: {ex}")
+        return None
+
+
+@sync_to_async
 def get_all_admins() -> list[dict]:
     """
     Получает всех админов из модели AdminItem.
@@ -84,3 +102,47 @@ def get_banned_ids() -> list[int]:
 
     banned_users = TGUser.objects.filter(is_banned=True).only('tg_id')
     return [user.tg_id for user in banned_users]
+
+
+@sync_to_async
+def get_categories() -> dict:
+    """
+    Получает все категории товаров. Возвращает dict с категориями.
+    """
+
+    result = dict()
+    cats = Category.objects.all()
+    for cat in cats:
+        cat_parent_id = 0 if not cat.parent else cat.parent.id
+        result[cat.id] = {'name': cat.name, 'parent_id': cat_parent_id}
+    return result
+
+
+@sync_to_async
+def get_products(cat_id: int) -> dict:
+    """
+    Получает продукты указанной категории (cat_id).
+    Возвращает dict с продуктами.
+    """
+
+    result = dict()
+    products = Product.objects.select_related('category').filter(category_id=cat_id).exclude(available='no')
+    for prod in products:
+        result[prod.id] = {
+            'title': prod.title,
+            'total_price': prod.total_price,
+            'parent_id': prod.category.id
+        }
+    return result
+
+
+@sync_to_async
+def get_product_detail(prod_id: int) -> dict:
+    """
+    Получает продукты указанной категории (cat_id).
+    Возвращает dict с продуктами.
+    """
+
+    product = Product.objects.get(id=prod_id)
+    # logger.info(f"product {product.images.all()}")
+    return product

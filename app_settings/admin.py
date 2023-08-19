@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.auth.models import Group
 
 from app_settings.models import AdminItem, AdminsSettings, CompanySettings, CurrencySettings
 from django_celery_beat.models import (
@@ -62,6 +63,7 @@ class AdminsSettingsAdmin(admin.ModelAdmin):
         return False
 
 
+admin.site.unregister(Group)
 admin.site.unregister(SolarSchedule)
 admin.site.unregister(ClockedSchedule)
 admin.site.unregister(PeriodicTask)

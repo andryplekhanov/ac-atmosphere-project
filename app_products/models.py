@@ -67,6 +67,10 @@ class Product(models.Model):
         return f"id: {self.id}, {self.title}"
 
     @property
+    def avaliable_status(self):
+        return [status[1] for status in self.AVAILABLE_CHOICES if status[0] == self.available][0]
+
+    @property
     @admin.display(description='цена (руб)')
     def total_price(self):
         if self.use_dollars:
@@ -86,40 +90,3 @@ class Image(models.Model):
     class Meta:
         verbose_name = 'изображение'
         verbose_name_plural = 'изображения'
-
-
-class ParameterName(models.Model):
-    name = models.CharField(max_length=255, verbose_name='характеристика', unique=True)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = 'имя характеристики'
-        verbose_name_plural = 'имена характеристик'
-
-
-class Parameter(models.Model):
-    parameter = models.ForeignKey(ParameterName, on_delete=models.CASCADE, related_name='parameter',
-                                  verbose_name='название')
-    products = models.ManyToManyField('Product', blank=True, verbose_name='продукты')
-    value = models.ForeignKey('ParameterValue', on_delete=models.CASCADE, verbose_name='значение',
-                              related_name='parameter')
-
-    def __str__(self):
-        return f'{self.parameter.name}: {self.value.value}'
-
-    class Meta:
-        verbose_name = 'характеристика'
-        verbose_name_plural = 'характеристики'
-
-
-class ParameterValue(models.Model):
-    value = models.CharField(max_length=255, verbose_name='значение', unique=True)
-
-    def __str__(self):
-        return self.value
-
-    class Meta:
-        verbose_name = 'значение характеристики'
-        verbose_name_plural = 'значения характеристик'

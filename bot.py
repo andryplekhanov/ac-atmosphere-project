@@ -14,6 +14,7 @@ from tgbot.handlers.admin import register_admin
 from tgbot.handlers.ban import register_ban
 from tgbot.handlers.call import register_call
 from tgbot.handlers.echo import register_echo
+from tgbot.handlers.menu import register_menu
 from tgbot.handlers.mess import register_mess
 from tgbot.handlers.start import register_start
 from tgbot.middlewares.environment import EnvironmentMiddleware
@@ -37,6 +38,7 @@ def register_all_handlers(dp):
     register_start(dp)
     register_call(dp)
     register_mess(dp)
+    register_menu(dp)
 
     register_echo(dp)
 
