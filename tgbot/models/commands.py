@@ -13,7 +13,7 @@ from asgiref.sync import sync_to_async
 
 from app_orders.models import Order, OrderItem
 from app_products.models import Category, Product
-from app_settings.models import AdminItem
+from app_settings.models import AdminItem, CompanySettings
 from app_telegram.models import TGUser, CallRequest
 
 logger = logging.getLogger(__name__)
@@ -91,6 +91,16 @@ def get_all_admins() -> list[dict]:
         admin_dict['username'] = admin.username
         result.append(admin_dict)
     return result
+
+
+@sync_to_async
+def get_company_info() -> CompanySettings:
+    """
+    Получает информацию о компании из БД.
+    Возвращает экземпляр класса CompanySettings.
+    """
+
+    return CompanySettings.objects.first()
 
 
 @sync_to_async
