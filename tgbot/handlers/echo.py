@@ -1,14 +1,11 @@
 from aiogram import types, Dispatcher
 
+from tgbot.services.default_commands import get_default_commands
+
 
 async def bot_echo(message: types.Message):
-    text = [
-        "Эхо без состояния.",
-        "Сообщение:",
-        message.text
-    ]
-
-    await message.answer('\n'.join(text))
+    commands = await get_default_commands()
+    await message.answer(f"Я реагирую на следующие команды:\n\n{commands}")
 
 
 async def bot_echo_all(message: types.Message):

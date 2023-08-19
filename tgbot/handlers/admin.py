@@ -1,9 +1,13 @@
 from aiogram import Dispatcher
 from aiogram.types import Message
 
+from tgbot.services.default_commands import get_default_commands
+
 
 async def admin_start(message: Message):
-    await message.reply("Hello, admin!")
+    commands = await get_default_commands()
+    await message.answer(f"Привет и добро пожаловать!\n\n"
+                         f"Я реагирую на следующие команды:\n\n{commands}")
 
 
 def register_admin(dp: Dispatcher):

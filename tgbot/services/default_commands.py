@@ -3,9 +3,10 @@ from aiogram.types import BotCommand, BotCommandScopeDefault
 
 DEFAULT_COMMANDS = (
     ('start', "🟢 Запустить бота"),
+    ('menu', "🛒 Товары и услуги"),
     ('call', "📞 Заказать звонок"),
     ('mess', "📩 Написать нам сообщение"),
-    ('menu', "🛒 Товары и услуги"),
+    ('about', "🔍 О нас"),
     ('help', "💡 Вывести справку"),
 )
 

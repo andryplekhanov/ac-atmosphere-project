@@ -12,6 +12,12 @@ from tgbot.services.saver import save_order
 
 
 async def menu(message: Message, state: FSMContext) -> None:
+    """
+    Хэндлер, реагирующий на команду /menu.
+    Получает все категории товаров и сохраняет их в машину состояний.
+    Предлагает пользователя инлайн-клавиатуру с главными категориями.
+    """
+
     await state.finish()
     cats = await get_categories()
     async with state.proxy() as data:
@@ -22,6 +28,11 @@ async def menu(message: Message, state: FSMContext) -> None:
 
 
 async def get_category(call: CallbackQuery, state: FSMContext, callback_data: dict) -> None:
+    """
+    Хэндлер, реагирующий на нажатие кнопки с категориями.
+    Предлагает пользователя инлайн-клавиатуру с подкатегориями и товарами.
+    """
+
     await call.message.edit_reply_markup(reply_markup=None)
 
     cat_id = int(callback_data.get('category_id'))
@@ -32,6 +43,11 @@ async def get_category(call: CallbackQuery, state: FSMContext, callback_data: di
 
 
 async def get_back(call: CallbackQuery, state: FSMContext, callback_data: dict) -> None:
+    """
+    Хэндлер, реагирующий на нажатие кнопки "назад".
+    Возвращает пользователя в предыдущее меню.
+    """
+
     await call.message.edit_reply_markup(reply_markup=None)
 
     cat_id = int(callback_data.get('prev_cat'))
@@ -53,6 +69,11 @@ async def get_back(call: CallbackQuery, state: FSMContext, callback_data: dict) 
 
 
 async def get_product_detail(call: CallbackQuery, state: FSMContext, callback_data: dict) -> None:
+    """
+    Хэндлер, реагирующий на нажатие кнопки с конкретным товаром.
+    Вызывает функцию для печати детальной информации по товару (print_product_detail).
+    """
+
     await call.message.edit_reply_markup(reply_markup=None)
 
     prod_id = int(callback_data.get('product_id'))
@@ -63,6 +84,11 @@ async def get_product_detail(call: CallbackQuery, state: FSMContext, callback_da
 
 
 async def make_order(call: CallbackQuery, state: FSMContext, callback_data: dict) -> None:
+    """
+    Хэндлер, реагирующий на нажатие кнопки "оставить заявку" на конкретном товаре.
+    Получает или создаёт пользователя и запрашивает подтвердить или ввести имя..
+    """
+
     await call.message.edit_reply_markup(reply_markup=None)
 
     async with state.proxy() as data:
@@ -88,6 +114,11 @@ async def make_order(call: CallbackQuery, state: FSMContext, callback_data: dict
 
 
 async def get_address(message: Message, state: FSMContext):
+    """
+    Хэндлер, реагирующий на состояние address.
+    Получает адрес для доставки и вызывает функцию-обработчик для создания заказа.
+    """
+
     async with state.proxy() as data:
         data['address'] = message.text
     await save_order(message, state)
@@ -95,8 +126,8 @@ async def get_address(message: Message, state: FSMContext):
 
 def register_menu(dp: Dispatcher):
     dp.register_message_handler(menu, commands=["menu"], state="*", is_banned=False)
-    dp.register_message_handler(get_address, state=ProductStates.address)
-    dp.register_callback_query_handler(get_category, for_cat.filter(), state="*", is_banned=False)
+    dp.register_message_handler(get_address, state=ProductStates.address, is_banned=False)
+    dp.register_callback_query_handler(get_category, for_cat.filter(), state="*")
     dp.register_callback_query_handler(get_back, for_back.filter(), state="*")
     dp.register_callback_query_handler(get_product_detail, for_prod.filter(), state="*")
     dp.register_callback_query_handler(make_order, for_order.filter(), state="*", is_banned=False)
