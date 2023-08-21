@@ -4,7 +4,7 @@
     "pk": 1,
     "fields": {
       "company": "Атмосфера",
-      "description": "Тили-тили, трали-вали.",
+      "description": "Очень крутая компания.\r\nМы номер 1 в Зимбабве.\r\nТили-тили, трали-вали.",
       "email": null,
       "phone_number": "+79036043900",
       "phone_messengers": "+79601604639"
@@ -205,10 +205,10 @@
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
       "use_dollars": true,
       "price_dollar": "125.00",
-      "price_rub": null,
+      "price_rub": "55000.00",
       "available": "stock",
       "created": "2023-08-10T13:16:06.975Z",
-      "updated": "2023-08-10T13:38:13.456Z"
+      "updated": "2023-08-20T13:43:52.752Z"
     }
   },
   {
@@ -223,7 +223,7 @@
       "price_rub": null,
       "available": "stock",
       "created": "2023-08-10T13:36:12.029Z",
-      "updated": "2023-08-10T13:38:03.517Z"
+      "updated": "2023-08-21T14:19:27.197Z"
     }
   },
   {
@@ -238,7 +238,7 @@
       "price_rub": null,
       "available": "stock",
       "created": "2023-08-10T13:49:24.702Z",
-      "updated": "2023-08-10T13:49:24.702Z"
+      "updated": "2023-08-21T14:19:34.725Z"
     }
   },
   {
@@ -253,7 +253,7 @@
       "price_rub": null,
       "available": "stock",
       "created": "2023-08-10T13:52:50.739Z",
-      "updated": "2023-08-10T13:52:50.740Z"
+      "updated": "2023-08-21T14:19:53.661Z"
     }
   },
   {
@@ -283,7 +283,7 @@
       "price_rub": null,
       "available": "order",
       "created": "2023-08-10T14:15:48.570Z",
-      "updated": "2023-08-10T14:15:48.570Z"
+      "updated": "2023-08-21T14:20:20.378Z"
     }
   },
   {
@@ -298,37 +298,7 @@
       "price_rub": null,
       "available": "stock",
       "created": "2023-08-10T14:19:53.617Z",
-      "updated": "2023-08-10T14:19:53.617Z"
-    }
-  },
-  {
-    "model": "app_products.product",
-    "pk": 15,
-    "fields": {
-      "category": 1,
-      "title": "Сплит-система Noname AC-57eeTA033/R2",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-      "use_dollars": true,
-      "price_dollar": "1000.00",
-      "price_rub": null,
-      "available": "stock",
-      "created": "2023-08-17T08:59:42.582Z",
-      "updated": "2023-08-17T08:59:42.582Z"
-    }
-  },
-  {
-    "model": "app_products.product",
-    "pk": 16,
-    "fields": {
-      "category": 1,
-      "title": "Сплит-система Noname AC-5642eeTA0773/R2",
-      "description": "🟢 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. \r\n\r\n🟢 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. \r\n\r\n🟢 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-      "use_dollars": true,
-      "price_dollar": "990.00",
-      "price_rub": null,
-      "available": "order",
-      "created": "2023-08-17T09:02:34.386Z",
-      "updated": "2023-08-18T09:35:08.379Z"
+      "updated": "2023-08-21T14:20:37.865Z"
     }
   },
   {
@@ -361,126 +331,6 @@
     "fields": {
       "image": "products/2023/08/10/screen4.png",
       "product": 8
-    }
-  },
-  {
-    "model": "app_products.image",
-    "pk": 5,
-    "fields": {
-      "image": "products/2023/08/10/screen4_MLl20ty.png",
-      "product": 9
-    }
-  },
-  {
-    "model": "app_products.image",
-    "pk": 6,
-    "fields": {
-      "image": "products/2023/08/10/screen2_hkfAVrH.png",
-      "product": 9
-    }
-  },
-  {
-    "model": "app_products.image",
-    "pk": 7,
-    "fields": {
-      "image": "products/2023/08/10/screen2_BxoCd3J.png",
-      "product": 10
-    }
-  },
-  {
-    "model": "app_products.image",
-    "pk": 8,
-    "fields": {
-      "image": "products/2023/08/10/screen1_94Iz54F.png",
-      "product": 11
-    }
-  },
-  {
-    "model": "app_products.image",
-    "pk": 9,
-    "fields": {
-      "image": "products/2023/08/10/screen2_pRpIejX.png",
-      "product": 11
-    }
-  },
-  {
-    "model": "app_products.image",
-    "pk": 10,
-    "fields": {
-      "image": "products/2023/08/10/screen3_JzwYUn7.png",
-      "product": 11
-    }
-  },
-  {
-    "model": "app_products.image",
-    "pk": 11,
-    "fields": {
-      "image": "products/2023/08/10/screen4_ACxOftq.png",
-      "product": 11
-    }
-  },
-  {
-    "model": "app_products.image",
-    "pk": 12,
-    "fields": {
-      "image": "products/2023/08/10/screen1_gH2aOmk.png",
-      "product": 13
-    }
-  },
-  {
-    "model": "app_products.image",
-    "pk": 13,
-    "fields": {
-      "image": "products/2023/08/10/screen3_x0lMtBN.png",
-      "product": 13
-    }
-  },
-  {
-    "model": "app_products.image",
-    "pk": 14,
-    "fields": {
-      "image": "products/2023/08/10/screen1_bs39ksA.png",
-      "product": 14
-    }
-  },
-  {
-    "model": "app_products.image",
-    "pk": 15,
-    "fields": {
-      "image": "products/2023/08/10/screen3_9rmEAWF.png",
-      "product": 14
-    }
-  },
-  {
-    "model": "app_products.image",
-    "pk": 16,
-    "fields": {
-      "image": "products/2023/08/10/screen2_6epNCU6.png",
-      "product": 14
-    }
-  },
-  {
-    "model": "app_products.image",
-    "pk": 17,
-    "fields": {
-      "image": "products/2023/08/10/screen4_o0zERzh.png",
-      "product": 14
-    }
-  },
-  {
-    "model": "app_products.image",
-    "pk": 18,
-    "fields": {
-      "image": "products/2023/08/17/photo_2023-08-05_16.59.26.jpeg",
-      "product": 15
-    }
-  },
-  {
-    "model": "app_products.image",
-    "pk": 19,
-    "fields": {
-      "image": "products/2023/08/17/124066-padenie-karmannye_kompyutery-voda-apple-yabloko-3840x2160.jpeg",
-      "product": 15
     }
   }
 ]
