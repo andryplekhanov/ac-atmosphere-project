@@ -121,7 +121,11 @@ async def get_address(message: Message, state: FSMContext):
 
     async with state.proxy() as data:
         data['address'] = message.text
-    await save_order(message, state)
+    try:
+        await save_order(message, state)
+    except Exception:
+        await message.answer('🚫 <b>Что-то пошло не так.</b> Возможно, вы не ввели контактные данные.\n'
+                                  'Нажмите команду <b>/menu</b> и попробуйте еще раз.', parse_mode='html')
 
 
 def register_menu(dp: Dispatcher):

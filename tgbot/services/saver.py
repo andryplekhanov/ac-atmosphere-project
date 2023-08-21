@@ -39,7 +39,6 @@ async def save_order(message: Union[Message, CallbackQuery], state: FSMContext) 
         address=states.get('address')
     )
     if order:
-        await message.answer(f'{order}')
         await send_messages_new_order(
             message,
             states.get('user_fullname'),
