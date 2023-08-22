@@ -17,6 +17,6 @@ async def check_phone(message: Message) -> Union[str, None]:
             phone_number = message.text
     elif message.contact.phone_number:
         phone_number = message.contact.phone_number
-        phone_number = '+' + phone_number
+        # phone_number = '+' + phone_number
 
     return phone_number
