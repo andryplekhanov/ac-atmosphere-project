@@ -55,6 +55,12 @@ services:
     env_file: .env
     ports:
       - 5433:5432
+    logging:
+      driver: loki
+      options:
+        max-file: "5"
+        max-size: "5m"
+        loki-url: http://localhost:3100/loki/api/v1/push
 
   redis:
     container_name: ${PROJECT_NAME}-redis
@@ -68,6 +74,12 @@ services:
       - ${REDIS_PORT}
     volumes:
       - ./redis.conf:/usr/local/etc/redis/redis.conf
+    logging:
+      driver: loki
+      options:
+        max-file: "5"
+        max-size: "5m"
+        loki-url: http://localhost:3100/loki/api/v1/push
 
   celery:
     build:
@@ -80,6 +92,12 @@ services:
       - redis
     env_file:
       - ./.env
+    logging:
+      driver: loki
+      options:
+        max-file: "5"
+        max-size: "5m"
+        loki-url: http://localhost:3100/loki/api/v1/push
 
   celery-beat:
     build:
@@ -92,6 +110,12 @@ services:
       - ./.env
     depends_on:
       - redis
+    logging:
+      driver: loki
+      options:
+        max-file: "5"
+        max-size: "5m"
+        loki-url: http://localhost:3100/loki/api/v1/push
 
   grafana:
     image: grafana/grafana:9.2.15
@@ -100,6 +124,9 @@ services:
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
     ports:
       - "3000:3000"
+    restart: unless-stopped
+    volumes:
+      - grafana_data:/var/lib/grafana
 
   loki:
     image: grafana/loki:2.8.0
@@ -109,3 +136,4 @@ services:
 volumes:
   postgres_data:
   redis_data:
+  grafana_data:
