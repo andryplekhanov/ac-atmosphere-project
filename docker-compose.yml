@@ -16,6 +16,12 @@ services:
       - redis
       - web
     env_file: .env
+    logging:
+      driver: loki
+      options:
+        max-file: "5"
+        max-size: "5m"
+        loki-url: http://localhost:3100/loki/api/v1/push
 
   web:
     container_name: ${PROJECT_NAME}-web
@@ -33,6 +39,12 @@ services:
       - db
       - redis
     env_file: .env
+    logging:
+      driver: loki
+      options:
+        max-file: "5"
+        max-size: "5m"
+        loki-url: http://localhost:3100/loki/api/v1/push
 
   db:
     image: postgres:15.0-alpine
@@ -80,6 +92,19 @@ services:
       - ./.env
     depends_on:
       - redis
+
+  grafana:
+    image: grafana/grafana:9.2.15
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    ports:
+      - "3000:3000"
+
+  loki:
+    image: grafana/loki:2.8.0
+    ports:
+      - "3100:3100"
 
 volumes:
   postgres_data:
