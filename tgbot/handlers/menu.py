@@ -1,6 +1,7 @@
 from aiogram import Dispatcher
 from aiogram.dispatcher import FSMContext
 from aiogram.types import Message, CallbackQuery
+from django.db import IntegrityError
 
 from tgbot.keyboards.inline import main_categories_choice, categories_choice, personal_data_choice
 from tgbot.misc.factories import for_cat, for_back, for_prod, for_order
@@ -36,10 +37,17 @@ async def get_category(call: CallbackQuery, state: FSMContext, callback_data: di
     await call.message.edit_reply_markup(reply_markup=None)
 
     cat_id = int(callback_data.get('category_id'))
-    sub_cats, products = await get_subcats_and_products(cat_id=cat_id, state=state)
-    await call.message.answer(f'Выбирайте:', reply_markup=await categories_choice(sub_cats, products, cat_id))
-
-    await call.message.delete()
+    try:
+        sub_cats, products = await get_subcats_and_products(cat_id=cat_id, state=state)
+        await call.message.answer(f'Выбирайте:', reply_markup=await categories_choice(sub_cats, products, cat_id))
+        await call.message.delete()
+    except AttributeError:
+        cats = await get_categories()
+        async with state.proxy() as data:
+            data['user_id'] = int(call.message.from_user.id)
+            data['last_command'] = 'menu'
+            data['categories'] = cats
+        await call.message.answer(f'Выберите категорию', reply_markup=await main_categories_choice(cats))
 
 
 async def get_back(call: CallbackQuery, state: FSMContext, callback_data: dict) -> None:
@@ -50,22 +58,29 @@ async def get_back(call: CallbackQuery, state: FSMContext, callback_data: dict) 
 
     await call.message.edit_reply_markup(reply_markup=None)
 
-    cat_id = int(callback_data.get('prev_cat'))
-    if callback_data.get('section') == 'cat':
-        parent_id = await get_parent_id(current_cat=cat_id, state=state)
-    else:
-        parent_id = cat_id
+    try:
+        cat_id = int(callback_data.get('prev_cat'))
+        if callback_data.get('section') == 'cat':
+            parent_id = await get_parent_id(current_cat=cat_id, state=state)
+        else:
+            parent_id = cat_id
 
-    if parent_id == 0:
-        states = await state.get_data()
-        cats = states.get('categories')
+        if parent_id == 0:
+            states = await state.get_data()
+            cats = states.get('categories')
+            await call.message.answer(f'Выберите категорию', reply_markup=await main_categories_choice(cats))
+        else:
+            sub_cats, products = await get_subcats_and_products(cat_id=parent_id, state=state)
+            await call.message.answer(f'Выбирайте:',
+                                      reply_markup=await categories_choice(sub_cats, products, parent_id))
+        await call.message.delete()
+    except AttributeError:
+        cats = await get_categories()
+        async with state.proxy() as data:
+            data['user_id'] = int(call.message.from_user.id)
+            data['last_command'] = 'menu'
+            data['categories'] = cats
         await call.message.answer(f'Выберите категорию', reply_markup=await main_categories_choice(cats))
-    else:
-        sub_cats, products = await get_subcats_and_products(cat_id=parent_id, state=state)
-        await call.message.answer(f'Выбирайте:',
-                                  reply_markup=await categories_choice(sub_cats, products, parent_id))
-
-    await call.message.delete()
 
 
 async def get_product_detail(call: CallbackQuery, state: FSMContext, callback_data: dict) -> None:
@@ -91,26 +106,33 @@ async def make_order(call: CallbackQuery, state: FSMContext, callback_data: dict
 
     await call.message.edit_reply_markup(reply_markup=None)
 
-    async with state.proxy() as data:
-        data['product_id'] = int(callback_data.get('prod_id'))
-        data['last_command'] = 'menu'
-
-    states = await state.get_data()
-
-    user = await get_or_create_user(user_id=states.get('user_id'))
-    if user.fullname == 'не заполнено' or user.phone_number == 'не заполнено':
-        await call.message.answer('Введите ваше имя')
-        await UsersStates.user_fullname.set()
-    else:
+    try:
         async with state.proxy() as data:
-            data['user_fullname'] = user.fullname
-            data['user_phone'] = user.phone_number
-        await call.message.answer(f'Ваше имя: <b>{user.fullname}</b>\n'
-                                  f'Ваш телефон: <b>{user.phone_number}</b>\n'
-                                  f'💡 Всё верно?',
-                                  reply_markup=personal_data_choice, parse_mode='html')
+            data['product_id'] = int(callback_data.get('prod_id'))
+            data['last_command'] = 'menu'
 
-    # await call.message.delete()
+        states = await state.get_data()
+
+        user = await get_or_create_user(user_id=states.get('user_id'))
+        if user.fullname == 'не заполнено' or user.phone_number == 'не заполнено':
+            await call.message.answer('Введите ваше имя')
+            await UsersStates.user_fullname.set()
+        else:
+            async with state.proxy() as data:
+                data['user_fullname'] = user.fullname
+                data['user_phone'] = user.phone_number
+            await call.message.answer(f'Ваше имя: <b>{user.fullname}</b>\n'
+                                      f'Ваш телефон: <b>{user.phone_number}</b>\n'
+                                      f'💡 Всё верно?',
+                                      reply_markup=personal_data_choice, parse_mode='html')
+
+    except IntegrityError:
+        cats = await get_categories()
+        async with state.proxy() as data:
+            data['user_id'] = int(call.message.from_user.id)
+            data['last_command'] = 'menu'
+            data['categories'] = cats
+        await call.message.answer(f'Выберите категорию', reply_markup=await main_categories_choice(cats))
 
 
 async def get_address(message: Message, state: FSMContext):
@@ -124,6 +146,7 @@ async def get_address(message: Message, state: FSMContext):
     try:
         await save_order(message, state)
     except Exception:
+        await state.finish()
         await message.answer('🚫 <b>Что-то пошло не так.</b> Возможно, вы не ввели контактные данные.\n'
                                   'Нажмите команду <b>/menu</b> и попробуйте еще раз.', parse_mode='html')
 

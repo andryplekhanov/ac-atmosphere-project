@@ -66,6 +66,7 @@ async def confirm_personal_data(call: CallbackQuery, state: FSMContext) -> None:
             await ProductStates.address.set()
             await call.message.answer('Введите адрес доставки')
     except Exception:
+        await state.finish()
         await call.message.answer('🚫 <b>Что-то пошло не так.</b> Возможно, вы не ввели контактные данные.\n'
                                   'Нажмите команду <b>/start</b> и попробуйте еще раз.', parse_mode='html')
 
