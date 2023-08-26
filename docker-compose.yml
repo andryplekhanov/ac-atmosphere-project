@@ -33,7 +33,7 @@ services:
       - .:/usr/src/app/${PROJECT_NAME:-web}
     command: python manage.py runserver 0.0.0.0:8000
     ports:
-      - 8000:8000
+      - "8000:8000"
     restart: always
     depends_on:
       - db
@@ -54,7 +54,7 @@ services:
     container_name: ${PROJECT_NAME}-db
     env_file: .env
     ports:
-      - 5433:5432
+      - "5433:5432"
     logging:
       driver: loki
       options:
@@ -92,6 +92,7 @@ services:
       - redis
     env_file:
       - ./.env
+    restart: always
     logging:
       driver: loki
       options:
@@ -110,6 +111,7 @@ services:
       - ./.env
     depends_on:
       - redis
+    restart: always
     logging:
       driver: loki
       options:
