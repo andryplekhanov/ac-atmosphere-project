@@ -86,20 +86,14 @@ WSGI_APPLICATION = 'dj_ac.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-POSTGRES_DB = os.environ.get('POSTGRES_DB')
-POSTGRES_USER = os.environ.get('POSTGRES_USER')
-POSTGRES_PASS = os.environ.get('POSTGRES_PASSWORD')
-POSTGRES_HOST = "db"
-POSTGRES_PORT = 5432
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': POSTGRES_DB,
-        'USER': POSTGRES_USER,
-        'PASSWORD': POSTGRES_PASS,
-        'HOST': POSTGRES_HOST,
-        'PORT': POSTGRES_PORT,
+        'NAME': os.environ.get('POSTGRES_DB'),
+        'USER': os.environ.get('POSTGRES_USER'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        'HOST': os.environ.get('POSTGRES_HOST'),
+        'PORT': 5432,
         'ATOMIC_REQUESTS': True,
     },
 }
