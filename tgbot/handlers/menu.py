@@ -1,7 +1,6 @@
 from aiogram import Dispatcher
 from aiogram.dispatcher import FSMContext
 from aiogram.types import Message, CallbackQuery
-from django.db import IntegrityError
 
 from tgbot.keyboards.inline import main_categories_choice, categories_choice, personal_data_choice
 from tgbot.misc.factories import for_cat, for_back, for_prod, for_order
@@ -41,13 +40,8 @@ async def get_category(call: CallbackQuery, state: FSMContext, callback_data: di
         sub_cats, products = await get_subcats_and_products(cat_id=cat_id, state=state)
         await call.message.answer(f'Выбирайте:', reply_markup=await categories_choice(sub_cats, products, cat_id))
         await call.message.delete()
-    except AttributeError:
-        cats = await get_categories()
-        async with state.proxy() as data:
-            data['user_id'] = int(call.message.from_user.id)
-            data['last_command'] = 'menu'
-            data['categories'] = cats
-        await call.message.answer(f'Выберите категорию', reply_markup=await main_categories_choice(cats))
+    except Exception:
+        await call.message.answer(f'Вы уже вышли из меню. Войти заново: /menu')
 
 
 async def get_back(call: CallbackQuery, state: FSMContext, callback_data: dict) -> None:
@@ -74,13 +68,8 @@ async def get_back(call: CallbackQuery, state: FSMContext, callback_data: dict) 
             await call.message.answer(f'Выбирайте:',
                                       reply_markup=await categories_choice(sub_cats, products, parent_id))
         await call.message.delete()
-    except AttributeError:
-        cats = await get_categories()
-        async with state.proxy() as data:
-            data['user_id'] = int(call.message.from_user.id)
-            data['last_command'] = 'menu'
-            data['categories'] = cats
-        await call.message.answer(f'Выберите категорию', reply_markup=await main_categories_choice(cats))
+    except Exception:
+        await call.message.answer(f'Вы уже вышли из меню. Войти заново: /menu')
 
 
 async def get_product_detail(call: CallbackQuery, state: FSMContext, callback_data: dict) -> None:
@@ -126,13 +115,8 @@ async def make_order(call: CallbackQuery, state: FSMContext, callback_data: dict
                                       f'💡 Всё верно?',
                                       reply_markup=personal_data_choice, parse_mode='html')
 
-    except IntegrityError:
-        cats = await get_categories()
-        async with state.proxy() as data:
-            data['user_id'] = int(call.message.from_user.id)
-            data['last_command'] = 'menu'
-            data['categories'] = cats
-        await call.message.answer(f'Выберите категорию', reply_markup=await main_categories_choice(cats))
+    except Exception:
+        await call.message.answer(f'Вы уже вышли из меню. Войти заново: /menu')
 
 
 async def get_address(message: Message, state: FSMContext):
