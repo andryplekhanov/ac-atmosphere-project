@@ -9,5 +9,11 @@ logger = logging.getLogger(__name__)
 @app.task
 def get_rate():
     """ Таск по обновлению курса доллара """
-    logger.info(f"Starting task 'get_rate'")
-    get_exchange_rate()
+
+    try:
+        logger.info(f"Starting task 'get_rate'")
+        get_exchange_rate()
+    except Exception as ex:
+        logger.error(f"get_exchange_rate: FAIL: {ex}")
+        pass
+    
