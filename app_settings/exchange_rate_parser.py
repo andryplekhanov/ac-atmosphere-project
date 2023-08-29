@@ -3,6 +3,8 @@ from decimal import Decimal
 
 import requests
 from bs4 import BeautifulSoup
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 from app_settings.models import CurrencySettings
 
@@ -30,6 +32,10 @@ def scrap_rate() -> Decimal:
     url = 'https://www.google.ru/search?q=dollar+rouble+rate'
 
     session = requests.session()
+    retry = Retry(connect=3, backoff_factor=0.5)
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
     response = session.get(url=url, headers=headers)
 
     if response.status_code == 200:
